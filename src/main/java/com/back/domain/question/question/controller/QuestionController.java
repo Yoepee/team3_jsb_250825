@@ -40,4 +40,10 @@ public class QuestionController {
         questionService.write(subject, content);
         return "redirect:/board";
     }
+
+    @PostMapping("/board/delete/{id}")
+    public String boardDelete(@PathVariable int id) {
+        questionService.deleteById(id);
+        return "redirect:/board";
+    }
 }

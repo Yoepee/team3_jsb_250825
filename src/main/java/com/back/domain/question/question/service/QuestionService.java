@@ -30,4 +30,8 @@ public class QuestionService {
     public Question findById(int id) {
         return questionRepository.findById(id).stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
+
+    public void deleteById(int id) {
+        questionRepository.deleteById(id);
+    }
 }
