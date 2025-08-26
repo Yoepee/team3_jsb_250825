@@ -11,8 +11,10 @@
     <form id="deleteForm" th:action="@{/board/delete/{id}(id=${question.id})}" method="post">
         <button type="submit">질문 삭제</button>
     </form>
+    <form id="updateForm" th:action="@{/board/update/{id}(id=${question.id})}">
+        <button type="submit">질문 수정</button>
+    </form>
     <span style="cursor:pointer"
           th:onclick="|location.href='@{/board}'|">메인 페이지로 이동</span>
-
 </body>
 </html>

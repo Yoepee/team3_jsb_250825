@@ -46,4 +46,18 @@ public class QuestionController {
         questionService.deleteById(id);
         return "redirect:/board";
     }
+
+    @GetMapping("/board/update/{id}")
+    public String boardUpdate(@PathVariable int id, Model model) {
+        model.addAttribute("question", questionService.findById(id));
+        return "board/boardUpdate";
+    }
+
+    @PostMapping("/board/update/{id}")
+    public String boardUpdateSubmit(@RequestParam String subject,
+                                    @RequestParam String content,
+                                    @PathVariable int id) {
+        questionService.updateById(id, subject, content);
+        return "redirect:/board";
+    }
 }

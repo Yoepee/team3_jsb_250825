@@ -34,4 +34,12 @@ public class QuestionService {
     public void deleteById(int id) {
         questionRepository.deleteById(id);
     }
+
+    public Question updateById(int id, String subject, String content) {
+        Question updatedQuestion = findById(id);
+        updatedQuestion.setSubject(subject);
+        updatedQuestion.setContent(content);
+        questionRepository.save(updatedQuestion);
+        return updatedQuestion;
+    }
 }
