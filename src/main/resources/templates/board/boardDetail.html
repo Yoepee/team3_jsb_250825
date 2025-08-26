@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Board Detail</title>
+</head>
+<body>
+    <h1 th:text="${question.subject}"></h1>
+    <span th:text="${question.content}"></span>
+    <br>
+    <span style="cursor:pointer"
+          th:onclick="|location.href='@{/board}'|">메인 페이지로 이동</span>
+</body>
+</html>
