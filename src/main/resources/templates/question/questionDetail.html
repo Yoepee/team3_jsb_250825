@@ -8,10 +8,10 @@
     <h1 th:text="${question.subject}"></h1>
     <span th:text="${question.content}"></span>
     <br>
-    <form id="deleteForm" th:action="@{/board/delete/{id}(id=${question.id})}" method="post">
+    <form id="deleteForm" th:action="@{/templates/question/delete/{id}(id=${question.id})}" method="post">
         <button type="submit">질문 삭제</button>
     </form>
-    <form id="updateForm" th:action="@{/board/update/{id}(id=${question.id})}">
+    <form id="updateForm" th:action="@{/templates/question/update/{id}(id=${question.id})}">
         <button type="submit">질문 수정</button>
     </form>
     <span style="cursor:pointer"

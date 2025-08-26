@@ -17,47 +17,47 @@ public class QuestionController {
         return "<h1>Main</h1>";
     }
 
-    @GetMapping("/board")
-    public String board(Model model) {
+    @GetMapping("/question")
+    public String question(Model model) {
         model.addAttribute("questions", questionService.findAll());
-        return "board/board";
+        return "question/question";
     }
 
-    @GetMapping("/board/{id}")
-    public String boardDetail(@PathVariable int id, Model model) {
+    @GetMapping("/question/{id}")
+    public String questionDetail(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findById(id));
-        return "board/boardDetail";
+        return "question/questionDetail";
     }
 
-    @GetMapping("/board/write")
-    public String boardWrite(Model model) {
-        return "board/boardWrite";
+    @GetMapping("/question/write")
+    public String questionWrite(Model model) {
+        return "question/questionWrite";
     }
 
-    @PostMapping("/board/write")
-    public String boardWriteSubmit(@RequestParam String subject,
+    @PostMapping("/question/write")
+    public String questionWriteSubmit(@RequestParam String subject,
                                    @RequestParam String content) {
         questionService.write(subject, content);
-        return "redirect:/board";
+        return "redirect:/question";
     }
 
-    @PostMapping("/board/delete/{id}")
-    public String boardDelete(@PathVariable int id) {
+    @PostMapping("/question/delete/{id}")
+    public String questionDelete(@PathVariable int id) {
         questionService.deleteById(id);
-        return "redirect:/board";
+        return "redirect:/question";
     }
 
-    @GetMapping("/board/update/{id}")
-    public String boardUpdate(@PathVariable int id, Model model) {
+    @GetMapping("/question/update/{id}")
+    public String questionUpdate(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findById(id));
-        return "board/boardUpdate";
+        return "question/questionUpdate";
     }
 
-    @PostMapping("/board/update/{id}")
-    public String boardUpdateSubmit(@RequestParam String subject,
+    @PostMapping("/question/update/{id}")
+    public String questionUpdateSubmit(@RequestParam String subject,
                                     @RequestParam String content,
                                     @PathVariable int id) {
         questionService.updateById(id, subject, content);
-        return "redirect:/board";
+        return "redirect:/question";
     }
 }
