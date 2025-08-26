@@ -4,9 +4,7 @@ import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,5 +27,17 @@ public class QuestionController {
     public String boardDetail(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findById(id));
         return "board/boardDetail";
+    }
+
+    @GetMapping("/board/write")
+    public String boardWrite(Model model) {
+        return "board/boardWrite";
+    }
+
+    @PostMapping("/board/write")
+    public String boardWriteSubmit(@RequestParam String subject,
+                                   @RequestParam String content) {
+        questionService.write(subject, content);
+        return "redirect:/board";
     }
 }
