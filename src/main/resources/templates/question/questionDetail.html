@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Board Detail</title>
+    <title>question Detail</title>
 </head>
 <body>
     <h1 th:text="${question.subject}"></h1>
@@ -15,6 +15,6 @@
         <button type="submit">질문 수정</button>
     </form>
     <span style="cursor:pointer"
-          th:onclick="|location.href='@{/board}'|">메인 페이지로 이동</span>
+          th:onclick="|location.href='@{/question}'|">메인 페이지로 이동</span>
 </body>
 </html>

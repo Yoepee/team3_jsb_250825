@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Main Board</title>
+    <title>Main question</title>
 </head>
 <body>
-    <h1>Test board</h1>
+    <h1>Test question</h1>
     <ul>
         <li th:each="q : ${questions}">
             <strong style="cursor:pointer"
                     th:text="${q.subject}"
-                    th:onclick="|location.href='@{/board/{id}(id=${q.id})}'|">
+                    th:onclick="|location.href='@{/question/{id}(id=${q.id})}'|">
             </strong>
         </li>
     </ul>
     <strong style="cursor:pointer"
-            th:onclick="|location.href='@{/board/write}'|">새 글 작성 하기</strong>
+            th:onclick="|location.href='@{/question/write}'|">새 글 작성 하기</strong>
 </body>
 </html>
