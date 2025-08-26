@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>글 수정하기</h1>
-    <form th:action="@{/templates/question/update/{id}(id=${question.id})}" method="post">
+    <form th:action="@{/question/update/{id}(id=${question.id})}" method="post">
       <div>
         <label for="subject">제목</label><br>
         <input type="text" id="subject" name="subject" placeholder="수정할 제목을 입력해주세요." required>
