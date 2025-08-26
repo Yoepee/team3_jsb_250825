@@ -20,7 +20,7 @@ public class Question extends BaseEntity {
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Answer> answerList = new ArrayList<>();
 
-    Question(String subject, String content) {
+    public Question(String subject, String content) {
         this.subject = subject;
         this.content = content;
     }
