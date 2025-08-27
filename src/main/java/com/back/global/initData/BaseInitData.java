@@ -35,5 +35,8 @@ public class BaseInitData {
         if (member == null) return;
         Question question1 = questionService.write(member,"주제 1", "내용 1");
         answerService.write(member, question1, "답변 1");
+        answerService.write(member, question1, "답변 2");
+        questionService.write(member,"주제 2", "내용 2");
+        questionService.write(member,"주제 3", "내용 3");
     }
 }
