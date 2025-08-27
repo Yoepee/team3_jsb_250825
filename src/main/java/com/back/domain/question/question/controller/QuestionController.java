@@ -11,12 +11,6 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("/")
-    @ResponseBody
-    public String list() {
-        return "<h1>Main</h1>";
-    }
-
     @GetMapping("/question")
     public String question(Model model) {
         model.addAttribute("questions", questionService.findAll());

@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class MemberController {
     private final MemberService memberService;
 
+    @GetMapping("/")
+    public String redirect() {
+        return "member/signin";
+    }
+
     @GetMapping("/signin")
     public String signin() {
         return "member/signin";
