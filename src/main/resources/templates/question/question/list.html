@@ -1,0 +1,30 @@
+<html xmlns:sec="https://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div sec:authorize="!isAuthenticated()">
+    <a href="/signup">회원가입</a>
+    <a href="/login">로그인</a>
+</div>
+
+
+<h3>게시글 목록</h3>
+
+<form action="/question/list" method="get">
+    <input name="kw" placeholder="검색어 입력" type="text"/>
+    <select name="kwType">
+        <option value="title">제목</option>
+        <option value="content">내용</option>
+    </select>
+    <button type="submit">검색</button>
+</form>
+
+<ul>
+    <li th:each="question : ${questions}">
+        <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
+        |
+        <span th:text="${#temporals.format(question.createdDate, 'yyyy.MM.dd | HH:mm')}"></span>
+    </li>
+</ul>
+<div>
+    <a href="/question/create">글쓰기</a>
+</div>

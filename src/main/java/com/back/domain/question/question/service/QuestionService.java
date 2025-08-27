@@ -5,6 +5,8 @@ import com.back.domain.question.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class QuestionService {
@@ -17,5 +19,9 @@ public class QuestionService {
 
     public long count() {
         return questionRepository.count();
+    }
+
+    public List<Question> findAll() {
+        return questionRepository.findAll();
     }
 }
