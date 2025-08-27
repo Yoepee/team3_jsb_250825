@@ -32,6 +32,10 @@ public class SecurityConfig {
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/")
                         .failureHandler(customAuthenticationFailureHandler))
+                .logout((logout) -> logout
+                        .logoutUrl("/member/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true))
         ;
 
         return http.build();
