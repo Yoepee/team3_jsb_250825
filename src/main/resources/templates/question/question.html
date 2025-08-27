@@ -6,6 +6,11 @@
 </head>
 <body>
     <h1>Test question</h1>
+    <strong>검색</strong>
+    <form th:action="@{/question/search}" method="post">
+        <input type="text" name="keyword">
+        <button type="submit">검색</button>
+    </form>
     <ul>
         <li th:each="q : ${questions}">
             <strong style="cursor:pointer"

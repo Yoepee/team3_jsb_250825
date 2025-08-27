@@ -62,4 +62,10 @@ public class QuestionController {
         questionService.updateById(id, subject, content);
         return "redirect:/question";
     }
+
+    @PostMapping("/question/search")
+    public String questionSearch(@RequestParam String keyword, Model model) {
+        model.addAttribute("questions", questionService.findQuestionsBySubject(keyword));
+        return "question/question";
+    }
 }
