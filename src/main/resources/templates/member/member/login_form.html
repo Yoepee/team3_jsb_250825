@@ -1,7 +1,7 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content">
     <h2>로그인</h2>
-    <form th:action="@{/member/login}" method="post" th:object="${form}">
+    <form method="post" th:action="@{/member/login}" th:object="${form}">
         <div th:if="${errorMessage}">
             <span th:text="${errorMessage}" style="color:red;"></span>
         </div>
