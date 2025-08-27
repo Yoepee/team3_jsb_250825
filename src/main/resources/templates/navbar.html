@@ -1,6 +1,6 @@
 <nav th:fragment="navbarFragment">
     <ul>
-        <li><a sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a></li>
-        <li><a sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a></li>
+        <li sec:authorize="isAnonymous()"><a th:href="@{/member/login}">로그인</a></li>
+        <li sec:authorize="isAuthenticated()"><a th:href="@{/member/logout}">로그아웃</a></li>
     </ul>
 </nav>
