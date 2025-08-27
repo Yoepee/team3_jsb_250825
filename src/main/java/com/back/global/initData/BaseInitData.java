@@ -33,12 +33,12 @@ public class BaseInitData {
 
         Member member1 = Member.builder()
                 .username("admin")
-                .password(passwordEncoder.encode(password))
+                .password(password)
                 .nickname("관리자")
                 .build();
         Member member2 = Member.builder()
                 .username("test123")
-                .password(passwordEncoder.encode(password))
+                .password(password)
                 .nickname("이작가")
                 .build();
 
