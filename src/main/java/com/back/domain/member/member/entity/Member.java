@@ -20,9 +20,9 @@ public class Member extends BaseEntity {
     private String password;
     private String nickname;
 
-    public Member(String username, String password, String nickname) {
+    public Member(String username, String rawPassword, String nickname) {
         this.username = username;
-        this.password = encryptPassword(password);
+        this.password = rawPassword;
         this.nickname = nickname;
     }
 

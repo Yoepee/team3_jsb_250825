@@ -29,7 +29,7 @@ class MemberControllerTest {
     @BeforeEach
     void setup() {
         Member member = Member.builder()
-                .username("test")
+                .username("testLogin123")
                 .password("123")
                 .nickname("이작가")
                 .build();
@@ -40,7 +40,7 @@ class MemberControllerTest {
     @DisplayName("로그인")
     void t1() throws Exception {
         mockMvc.perform(formLogin("/member/login")
-                        .user("test")
+                        .user("testLogin123")
                         .password("123"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
