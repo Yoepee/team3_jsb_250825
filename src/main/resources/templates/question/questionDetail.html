@@ -13,6 +13,10 @@
             <span th:text="${answer.content}"></span>
         </li>
     </ul>
+    <form th:action="@{/answer/write/{questionId}(questionId=${question.id})}" method="post">
+        <textarea name="content"></textarea>
+        <button type="submit">답변 등록</button>
+    </form>
     <br>
     <form id="deleteForm" th:action="@{/question/delete/{id}(id=${question.id})}" method="post">
         <button type="submit">질문 삭제</button>
