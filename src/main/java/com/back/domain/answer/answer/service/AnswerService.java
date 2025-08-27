@@ -23,4 +23,8 @@ public class AnswerService {
         answer.setContent(content);
         answerRepository.save(answer);
     }
+
+    public void delete(int id) {
+        answerRepository.deleteById(id);
+    }
 }

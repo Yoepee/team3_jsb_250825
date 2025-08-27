@@ -29,4 +29,10 @@ public class AnswerController {
         answerService.update(content, answerId);
         return "redirect:/question";
     }
+
+    @PostMapping("/answer/delete/{answerId}")
+    public String answerDelete(@PathVariable int answerId) {
+        answerService.delete(answerId);
+        return "redirect:/question";
+    }
 }

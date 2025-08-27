@@ -13,6 +13,9 @@
             <span th:text="${answer.id}"></span>
             <span>번 답변 : </span>
             <span th:text="${answer.content}"></span>
+            <form th:action="@{/answer/delete/{id}(id=${answer.id})}" method="post">
+                <button type="submit">삭제</button>
+            </form>
         </li>
     </ul>
     <form th:action="@{/answer/write/{questionId}(questionId=${question.id})}" method="post">
