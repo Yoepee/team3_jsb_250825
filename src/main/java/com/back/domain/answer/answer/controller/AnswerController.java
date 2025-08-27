@@ -7,14 +7,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/answer")
 public class AnswerController {
     private final AnswerService answerService;
 
-    @PutMapping("/{answerId}")
-    public Answer modifyAnswer(@PathVariable int answerId, @RequestBody String editContent) {
-        return answerService.modify(answerId,editContent);
+    @PutMapping("/{id}/edit")
+    public Answer modifyAnswer(@PathVariable int id, @RequestBody String editContent) {
+        return answerService.modify(id,editContent);
     }
 }

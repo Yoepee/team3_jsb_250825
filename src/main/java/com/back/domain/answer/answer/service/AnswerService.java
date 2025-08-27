@@ -12,15 +12,15 @@ import java.util.Optional;
 public class AnswerService {
     private final AnswerRepository answerRepository;
 
-    public Answer modify(int answerId, String editContent) {
-        Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
+    public Answer modify(int id, String editContent) {
+        Optional<Answer> optionalAnswer = answerRepository.findById(id);
 
         if (optionalAnswer.isPresent()) {
             Answer answer = optionalAnswer.get();
             answer.modifyContent(editContent);
             return answerRepository.save(answer);
         }else {
-            throw new RuntimeException(answerId + "번 답변이 존재하지 않습니다.");
+            throw new RuntimeException(id + "번 답변이 존재하지 않습니다.");
         }
     }
 }

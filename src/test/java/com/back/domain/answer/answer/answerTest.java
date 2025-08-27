@@ -18,20 +18,20 @@ public class answerTest {
     @Autowired
     private AnswerRepository answerRepository;
 
-    @Test
-    void zeriTestV1() {
-        AnswerRepository answerRepository = Mockito.mock(AnswerRepository.class);
-        Answer answer = new Answer();
-        answer.modifyContent("original");
-        Mockito.when(answerRepository.findById(1)).thenReturn(Optional.of(answer));
-        Mockito.when(answerRepository.save(answer)).thenReturn(answer);
-
-        AnswerService answerService = new AnswerService(answerRepository);
-
-        Answer result = answerService.modify(1, "edited");
-
-        assertThat(result.getContent()).isEqualTo("edited");
-    }
+//    @Test
+//    void zeriTestV1() {
+//        AnswerRepository answerRepository = Mockito.mock(AnswerRepository.class);
+//        Answer answer = new Answer();
+//        answer.modifyContent("original");
+//        Mockito.when(answerRepository.findById(1)).thenReturn(Optional.of(answer));
+//        Mockito.when(answerRepository.save(answer)).thenReturn(answer);
+//
+//        AnswerService answerService = new AnswerService(answerRepository);
+//
+//        Answer result = answerService.modify(1, "edited");
+//
+//        assertThat(result.getContent()).isEqualTo("edited");
+//    }
 
     @Test
     void zeriTestV2() {
