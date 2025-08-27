@@ -30,11 +30,13 @@ public class SecurityConfig {
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
                 .formLogin((formLogin) -> formLogin
                         .loginPage("/member/login")
-                        .defaultSuccessUrl("/")
+//                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/question/create") // TODO 성공 시 메인페이지로 이동
                         .failureHandler(customAuthenticationFailureHandler))
                 .logout((logout) -> logout
                         .logoutUrl("/member/logout")
-                        .logoutSuccessUrl("/")
+//                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/question/create") // TODO 성공 시 메인페이지로 이동
                         .invalidateHttpSession(true))
         ;
 
