@@ -1,16 +1,31 @@
-<html layout:decorate="~{layout}">
-<div layout:fragment="content" class="container">
-    <h5 class="my-3 border-bottom pb-2">질문등록</h5>
-    <form th:action="@{/question/create}" method="post">
-        <div class="mb-3">
+<html>
+<div>
+    <h2>질문등록</h2>
+    <form method="post" th:object="${questionForm}">
+        <div role="alert" th:if="${#fields.hasAnyErrors()}">
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red;" />
+        </div>
+        <div role="alert" th:if="${question != null}">
+            <div>
+                <span style="color:blue;">질문이 등록되었습니다:</span>
+                <span>[[${question.id}]]번</span>
+                /
+                <span>[[${question.subject}]]</span>
+                /
+                <span>[[${question.content}]]</span>
+                /
+                <span>[[${question.createdDate}]]</span>
+            </div>
+        </div>
+        <div>
             <label for="subject" class="form-label">제목</label>
-            <input type="text" name="subject" id="subject" class="form-control">
+            <input type="text" th:field="*{subject}" placeholder="제목" autofocus>
         </div>
-        <div class="mb-3">
+        <div>
             <label for="content" class="form-label">내용</label>
-            <textarea name="content" id="content" class="form-control" rows="10"></textarea>
+            <textarea th:field="*{content}" placeholder="내용"></textarea>
         </div>
-        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+        <input type="submit" value="등록하기">
     </form>
 </div>
 </html>
