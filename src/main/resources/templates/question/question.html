@@ -21,5 +21,9 @@
     </ul>
     <strong style="cursor:pointer"
             th:onclick="|location.href='@{/question/write}'|">새 글 작성 하기</strong>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">로그아웃</button>
+    </form>
 </body>
 </html>

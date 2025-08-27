@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Sign up</title>
 </head>
 <body>
-<button th:onclick="|location.href='@{/signup}'|">회원가입 하기</button><h1>로그인 하기</h1>
+<button th:onclick="|location.href='@{/signin}'|">로그인</button>
+<h1>회원가입 하기</h1>
 <form th:action="@{/signup}" method="post">
     <div>
         <label for="username">제목</label><br>

@@ -39,6 +39,4 @@ public class MemberController {
         }
         return "redirect:/signup";
     }
-
-
 }
