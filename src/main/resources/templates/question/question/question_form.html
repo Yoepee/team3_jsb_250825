@@ -1,9 +1,9 @@
-<html>
-<div>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content">
     <h2>질문등록</h2>
-    <form method="post" th:object="${questionForm}">
+    <form method="post" th:object="${form}">
         <div role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red;" />
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red;"/>
         </div>
         <div role="alert" th:if="${question != null}">
             <div>
