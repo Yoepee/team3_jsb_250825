@@ -4,6 +4,7 @@ import com.back.domain.answer.answer.service.AnswerService;
 import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,5 +20,13 @@ public class AnswerController {
                               @RequestParam String content) {
         answerService.write(content, questionService.findById(questionId));
         return "redirect:/question/" + questionId;
+    }
+
+    @GetMapping("/answer/update/{answerId}") // url에서 바로 넘겨주도록 테스트하기 위한 용도로 GET 설정
+//    @PostMapping("/answer/update/{answerId}")
+    public String answerUpdate(@PathVariable int answerId,
+                               @RequestParam String content) {
+        answerService.update(content, answerId);
+        return "redirect:/question";
     }
 }
