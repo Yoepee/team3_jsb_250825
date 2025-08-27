@@ -1,5 +1,6 @@
 package com.back.domain.member.member.service;
 
+import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,4 +9,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+
+    public long count() {
+        return memberRepository.count();
+    }
+
+    public Member join(String username, String password, String nickname) {
+        Member member = new Member(username, password, nickname);
+        return memberRepository.save(member);
+    }
+    
+    public Member findById(int id){
+        return memberRepository.findById(id).orElseThrow(() -> new RuntimeException("계정 불러오기 오류"));
+    }
 }

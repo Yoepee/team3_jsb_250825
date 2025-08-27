@@ -1,0 +1,7 @@
+<h3>[[${question.id}]]번 상세보기</h3>
+<h2>주제 : [[${question.subject}]]</h2>
+<p>내용 : [[${question.content}]]</p>
+<p>작성일 : [[${#temporals.format(question.createdDate, 'yy.MM.dd HH:mm:ss')}]]</p>
+<p>작성자 : [[${question.author.nickname}]]</p>
+
+<div th:replace="~{answer/answer/list :: answerList(${question})}"></div>
