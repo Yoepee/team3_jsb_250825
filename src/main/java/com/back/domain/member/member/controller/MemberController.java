@@ -8,4 +8,10 @@ import org.springframework.stereotype.Controller;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+
+    @PostMapping("/register")
+    public String register(@ModelAttribute MemberDto memberDto) {
+        memberService.register(memberDto);
+        return "redirect:/login";
+    }
 }
