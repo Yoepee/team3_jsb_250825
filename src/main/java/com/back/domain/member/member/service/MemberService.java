@@ -3,21 +3,25 @@ package com.back.domain.member.member.service;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public boolean signin(String username, String password) {
         Member findMember = memberExist(username);
         if (findMember == null) return false;
-        else return findMember.getPassword().equals(password);
+        else return passwordEncoder.matches(password, findMember.getPassword());
     }
 
-    public void save(Member member) {
-        memberRepository.save(member);
+    public void save(String username, String password, String nickname) {
+        String encodePassword = passwordEncoder.encode(password);
+        Member newMember = new Member(username, encodePassword, nickname);
+        memberRepository.save(newMember);
     }
 
     public Member memberExist(String username) {

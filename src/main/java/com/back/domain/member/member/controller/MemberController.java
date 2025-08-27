@@ -1,6 +1,5 @@
 package com.back.domain.member.member.controller;
 
-import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -11,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
-
 
     @GetMapping("/signin")
     public String signin() {
@@ -31,9 +28,8 @@ public class MemberController {
 
     @PostMapping("/signup")
     public String signup(String username, String password, String nickname) {
-        Member member = new Member(username, password, nickname);
         if (memberService.memberExist(username) == null) {
-            memberService.save(member);
+            memberService.save(username, password, nickname);
             return "redirect:/signin";
         }
         return "redirect:/signup";
