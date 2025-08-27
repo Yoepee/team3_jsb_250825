@@ -8,6 +8,12 @@
     <h1 th:text="${question.subject}"></h1>
     <span th:text="${question.content}"></span>
     <br>
+    <ul>
+        <li th:each="answer : ${answers}">
+            <span th:text="${answer.content}"></span>
+        </li>
+    </ul>
+    <br>
     <form id="deleteForm" th:action="@{/question/delete/{id}(id=${question.id})}" method="post">
         <button type="submit">질문 삭제</button>
     </form>

@@ -26,6 +26,8 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public String questionDetail(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findById(id));
+        model.addAttribute("answers",
+                questionService.findAllAnswersByQuestionId(id));
         return "question/questionDetail";
     }
 

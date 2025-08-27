@@ -1,5 +1,6 @@
 package com.back.domain.question.question.service;
 
+import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -41,5 +42,9 @@ public class QuestionService {
         updatedQuestion.setContent(content);
         questionRepository.save(updatedQuestion);
         return updatedQuestion;
+    }
+
+    public List<Answer> findAllAnswersByQuestionId(int questionId) {
+        return findById(questionId).getAnswerList();
     }
 }
