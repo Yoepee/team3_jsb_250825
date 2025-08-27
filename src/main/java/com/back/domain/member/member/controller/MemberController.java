@@ -1,8 +1,11 @@
 package com.back.domain.member.member.controller;
 
 import com.back.domain.member.member.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,7 +16,13 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(HttpSession session, Model model) {
+        Object exception = session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        if (exception instanceof String) {
+            model.addAttribute("errorMessage", exception);
+            session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+        }
+
         return "member/member/login_form";
     }
 }

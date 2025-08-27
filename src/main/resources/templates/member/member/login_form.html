@@ -1,18 +1,16 @@
 <html layout:decorate="~{layout}">
 <div layout:fragment="content">
-    <form th:action="@{/member/login}" method="post">
-        <div th:if="${param.error}">
-            <span style="color:red;">
-                사용자ID 또는 비밀번호를 확인해 주세요.
-            </span>
+    <form th:action="@{/member/login}" method="post" th:object="${form}">
+        <div th:if="${errorMessage}">
+            <span th:text="${errorMessage}" style="color:red;"></span>
         </div>
         <div>
             <label for="username">아이디</label>
-            <input type="text" name="username" id="username" placeholder="아이디" autofocus>
+            <input type="text" name="username" id="username" placeholder="아이디" required autofocus>
         </div>
         <div>
             <label for="password">비밀번호</label>
-            <input type="password" name="password" id="password" placeholder="비밀번호" >
+            <input type="password" name="password" id="password" placeholder="비밀번호" required>
         </div>
         <button type="submit">로그인</button>
     </form>
