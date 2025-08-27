@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign in</title>
+</head>
+<body>
+<h1>로그인 하기</h1>
+<form th:action="@{/signin}" method="post">
+    <div>
+        <label for="username">제목</label><br>
+        <input type="text" id="username" name="username" placeholder="이름을 입력해주세요" required>
+    </div>
+    <div>
+        <label for="password">내용</label><br>
+        <input type="password" id="password" name="password" placeholder="내용을 입력해주세요" required>
+    </div>
+    <div>
+        <button type="submit">로그인하기</button>
+    </div>
+</form>
+<br>
+<button th:onclick="|location.href='@{/signup}'|">회원가입 하기</button>
+</body>
+</html>
