@@ -15,4 +15,12 @@ public class Answer extends BaseEntity {
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
+
+    public void modifyContent(String editContent) {
+        this.content = editContent;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }
