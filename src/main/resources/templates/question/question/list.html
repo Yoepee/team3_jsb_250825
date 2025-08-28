@@ -1,6 +1,22 @@
-<div>
-    <table class="table">
-        <thead class="table-dark">
+<div sec:authorize="!isAuthenticated()">
+    <a href="/signup">회원가입</a>
+    <a href="/login">로그인</a>
+</div>
+
+<main>
+    <h3>게시글 목록</h3>
+
+    <form action="/question/list" method="get">
+        <input name="kw" placeholder="검색어 입력" type="text"/>
+        <select name="kwType">
+            <option value="title">제목</option>
+            <option value="content">내용</option>
+        </select>
+        <button type="submit">검색</button>
+    </form>
+
+    <table class="board-list">
+        <thead>
         <tr>
             <th>번호</th>
             <th>제목</th>
@@ -8,13 +24,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="question:${questions}" th:object="${question}">
-            <td th:text="${question.id}"></td>
-            <td>
-                <a th:href="@{|/questions/${question.id}/detail|}" th:text="${question.subject}"></a>
-            </td>
-            <td th:text="${#temporals.format(question.createdDate, 'yy.MM.dd')}"></td>
+        <tr th:each="question, loop : ${questions}">
+            <td th:text="${loop.index + 1}"></td>
+            <td><a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a></td>
+            <td th:text="${#temporals.format(question.createdDate, 'yyyy.MM.dd | HH:mm')}"></td>
         </tr>
         </tbody>
     </table>
+</main>
+<br>
+<div>
+    <a href="/question/create">글쓰기</a>
 </div>

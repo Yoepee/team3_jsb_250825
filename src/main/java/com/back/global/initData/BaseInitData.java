@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 public class BaseInitData {
-private final MemberService memberService;
+    private final MemberService memberService;
     private final QuestionService questionService;
     private final AnswerService answerService;
     @Bean
@@ -29,7 +29,7 @@ private final MemberService memberService;
         if (memberService.count() > 0) return;
         memberService.save("user1", "1234", "유저 1");
     }
-    
+
     private void work1() {
         if (questionService.count() > 0) return;
         Member member = memberService.findById(1);
@@ -39,6 +39,8 @@ private final MemberService memberService;
         answerService.write("답변 2", question1);
         questionService.write(member,"주제 2", "내용 2");
         questionService.write(member,"주제 3", "내용 3");
+        Question question1 = questionService.write("프록시 관련 어노테이션?", "@Transactional, @OneToMany");
+        Question question2 = questionService.write("주제", "내용");
     }
     private void work2() {
 

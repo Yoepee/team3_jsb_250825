@@ -18,6 +18,7 @@ public class Question extends BaseEntity {
     @Setter
     private String subject;
     @Setter
+     @Column(columnDefinition = "TEXT")
     private String content;
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Answer> answerList = new ArrayList<>();

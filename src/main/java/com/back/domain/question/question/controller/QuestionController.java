@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,16 +15,18 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController {
     private final QuestionService questionService;
 
-@PostMapping("/list/delete/{id}")
+    @Transactional(readOnly = true)
+    @GetMapping("/list")
+    public String showList(Model model) {
+        List<Question> questions = questionService.findAll();
+        model.addAttribute("questions", questions);
+        return "question/question/list";
+    }
+
+  @PostMapping("/list/delete/{id}")
     public String deleteQuestion(@PathVariable int id) {
         questionService.deleteById(id);
         return "redirect:/list";
-    }
-  
-    @GetMapping("/question")
-    public String question(Model model) {
-        model.addAttribute("questions", questionService.findAll());
-        return "question/question";
     }
 
 
