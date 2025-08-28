@@ -9,13 +9,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 @Configuration
 public class BaseInitData {
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
     private final QuestionService questionService;
     private final AnswerService answerService;
+
+  
     @Bean
     ApplicationRunner initApplicationRunner() {
         return args -> {
@@ -25,11 +29,10 @@ public class BaseInitData {
         };
     }
 
-    private void work0() {
+  private void work0() {
         if (memberService.count() > 0) return;
         memberService.save("user1", "1234", "유저 1");
     }
-
     private void work1() {
         if (questionService.count() > 0) return;
         Member member = memberService.findById(1);
@@ -48,5 +51,25 @@ public class BaseInitData {
         questionService.write("제목 2", "내용 2");
         questionService.write("제목 3", "내용 3");
         questionService.write("제목 4", "내용 4");
+    }
+
+    private void work2() {
+        if (memberService.count() > 0) return;
+
+        String password = "123";
+
+        Member member1 = Member.builder()
+                .username("admin")
+                .password(password)
+                .nickname("관리자")
+                .build();
+        Member member2 = Member.builder()
+                .username("test123")
+                .password(password)
+                .nickname("이작가")
+                .build();
+
+        memberService.save(member1);
+        memberService.save(member2);
     }
 }

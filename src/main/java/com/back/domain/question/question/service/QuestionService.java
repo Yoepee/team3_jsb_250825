@@ -15,6 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
+  public Question create(String subject, String content) {
+        Question question = new Question(subject, content);
+
+        return questionRepository.save(question);
+    }
 
     public List<Question> findAll() {
         return questionRepository.findAll();

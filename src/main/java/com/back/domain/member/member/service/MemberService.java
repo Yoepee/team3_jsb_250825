@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-  private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public void create(String username, String password, String nickname) {
         Member member = new Member(username, password, nickname);
@@ -36,8 +36,13 @@ public class MemberService {
     public long count() {
         return memberRepository.count();
     }
-
-    public Member findById(int i) {
+  
+  public Member findById(int i) {
         return memberRepository.findById(i).orElseThrow(() -> new RuntimeException("Member not found"));
-    }
+  }
+  
+  public Member save(Member member) {
+        member.encodePassword(passwordEncoder);
+        return memberRepository.save(member);
+  }
 }
