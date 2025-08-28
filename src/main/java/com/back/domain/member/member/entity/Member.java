@@ -5,11 +5,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.Base64;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Member extends BaseEntity {
     @Column(unique = true)
@@ -19,12 +19,7 @@ public class Member extends BaseEntity {
 
     public Member(String username, String password, String nickname) {
         this.username = username;
-        this.password = encryptPassword(password);
+        this.password = password;
         this.nickname = nickname;
-    }
-
-    private String encryptPassword(String password) {
-        String encryptedPassword = String.valueOf((password+"secret24").hashCode());
-        return Base64.getEncoder().encodeToString((password+"salt").getBytes());
     }
 }
