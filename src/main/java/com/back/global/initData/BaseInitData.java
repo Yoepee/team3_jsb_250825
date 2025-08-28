@@ -25,6 +25,8 @@ private final MemberService memberService;
             work0();
             work1();
             work2();
+            work3();
+            work4();
         };
     }
 
@@ -41,8 +43,8 @@ private final MemberService memberService;
         answerService.write("답변 2", question1);
         questionService.write(member,"주제 2", "내용 2");
         questionService.write(member,"주제 3", "내용 3");
-        Question question1 = questionService.write("프록시 관련 어노테이션?", "@Transactional, @OneToMany");
-        Question question2 = questionService.write("주제", "내용");
+        questionService.write("프록시 관련 어노테이션?", "@Transactional, @OneToMany");
+        questionService.write("주제", "내용");
     }
     private void work2() {
         questionService.write("제목 1", "내용 1");
@@ -72,8 +74,8 @@ private final MemberService memberService;
     }
   
     private void work4() {
-        questionService.write("임의 제목1", "임의 내용1"));
-        questionService.write("임의 제목2", "임의 내용2"));
+        questionService.write("임의 제목1", "임의 내용1");
+        questionService.write("임의 제목2", "임의 내용2");
         System.out.println("임의 데이터 저장 완료");
     }
 }

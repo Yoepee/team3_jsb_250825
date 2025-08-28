@@ -32,10 +32,6 @@ public class QuestionController {
         return "question/question/search";
     }
 
-@RequestMapping("/questions")
-public class QuestionController {
-    private final QuestionService questionService;
-
 
     @GetMapping("/create")
     public String showCreate(@ModelAttribute("form") QuestionForm form) {

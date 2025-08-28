@@ -19,7 +19,7 @@ public class AnswerService {
 
         if (optionalAnswer.isPresent()) {
             Answer answer = optionalAnswer.get();
-            answer.modifyContent(editContent);
+            answer.setContent(editContent);
             return answerRepository.save(answer);
         }else {
             throw new RuntimeException(id + "번 답변이 존재하지 않습니다.");
