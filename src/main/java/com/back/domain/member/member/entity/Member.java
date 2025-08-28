@@ -5,13 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.util.Base64;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 public class Member extends BaseEntity {
