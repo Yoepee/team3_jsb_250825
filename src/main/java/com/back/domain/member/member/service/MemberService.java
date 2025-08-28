@@ -27,4 +27,12 @@ public class MemberService {
     public Member memberExist(String username) {
         return memberRepository.findByUsername(username).orElse(null);
     }
+
+    public long count() {
+        return memberRepository.count();
+    }
+
+    public Member findById(int i) {
+        return memberRepository.findById(i).orElseThrow(() -> new RuntimeException("Member not found"));
+    }
 }

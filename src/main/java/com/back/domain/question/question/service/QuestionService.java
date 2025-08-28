@@ -51,6 +51,7 @@ public class QuestionService {
 
     public List<Question> findQuestionsBySubject(String subject) {
         return questionRepository.findBySubjectContaining(subject);
+    }
       
   public Question write(Member member, String subject, String content) {
         Question question = new Question(member, subject, content);

@@ -4,7 +4,6 @@ import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.answer.answer.repository.AnswerRepository;
 import com.back.domain.question.question.entity.Question;
 import jakarta.persistence.EntityNotFoundException;
-import com.back.domain.member.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +32,5 @@ public class AnswerService {
         Answer answer = findById(id);
         answerRepository.delete(answer);
    }
+
 }
