@@ -64,7 +64,13 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    public List<Question> findByAll() {
-        return questionRepository.findAll();
+    public List<Question> search(String kwType, String kw) {
+        if("subject".equals(kwType)) {
+            return questionRepository.findBySubjectContaining(kw);
+        } else if ("content".equals(kwType)) {
+            return questionRepository.findByContentContaining(kw);
+        } else {
+            return questionRepository.findBySubjectOrContentContaining(kw, kw);
+        }
     }
 }

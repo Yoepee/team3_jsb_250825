@@ -18,6 +18,7 @@ public class Answer extends BaseEntity {
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
+
     @ManyToOne(fetch = FetchType.LAZY)
     private Member author;
   

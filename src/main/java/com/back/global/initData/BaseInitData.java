@@ -14,11 +14,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 @Configuration
 public class BaseInitData {
-    private final MemberService memberService;
+private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final QuestionService questionService;
     private final AnswerService answerService;
-
   
     @Bean
     ApplicationRunner initApplicationRunner() {
@@ -46,14 +45,13 @@ public class BaseInitData {
         Question question2 = questionService.write("주제", "내용");
     }
     private void work2() {
-
         questionService.write("제목 1", "내용 1");
         questionService.write("제목 2", "내용 2");
         questionService.write("제목 3", "내용 3");
         questionService.write("제목 4", "내용 4");
     }
 
-    private void work2() {
+    private void work3() {
         if (memberService.count() > 0) return;
 
         String password = "123";
@@ -71,5 +69,11 @@ public class BaseInitData {
 
         memberService.save(member1);
         memberService.save(member2);
+    }
+  
+    private void work4() {
+        questionService.write("임의 제목1", "임의 내용1"));
+        questionService.write("임의 제목2", "임의 내용2"));
+        System.out.println("임의 데이터 저장 완료");
     }
 }

@@ -15,6 +15,23 @@ import java.util.List;
 @RequestMapping("/question")
 @Controller
 @RequiredArgsConstructor
+public class QuestionController {
+    private final QuestionService questionService;
+
+    @GetMapping("/search/{kwType}/{kw}")
+    public String search(@PathVariable String kwType, @PathVariable String kw, Model model) {
+        List<Question> questions = questionService.search(kwType, kw);
+        model.addAttribute("questions", questions);
+        return "question/question/search"; // resources/templates/question/search.html
+    }
+
+    @GetMapping("/search")
+    public String searchByParam(@RequestParam String kwType, @RequestParam String kw, Model model) {
+        List<Question> questions = questionService.search(kwType, kw);
+        model.addAttribute("questions", questions);
+        return "question/question/search";
+    }
+
 @RequestMapping("/questions")
 public class QuestionController {
     private final QuestionService questionService;
