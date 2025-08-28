@@ -4,12 +4,9 @@ import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-
-import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,7 +57,7 @@ public class QuestionController {
     public String questionSearch(@RequestParam String keyword, Model model) {
         model.addAttribute("questions", questionService.findQuestionsBySubject(keyword));
         return "question/question";
-
+    }
 
     @GetMapping("/{id}/detail")
     @Transactional(readOnly = true)

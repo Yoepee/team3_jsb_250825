@@ -27,7 +27,7 @@ private final MemberService memberService;
 
     private void work0() {
         if (memberService.count() > 0) return;
-        Member member = memberService.join("user1", "1234", "유저 1");
+        memberService.save("user1", "1234", "유저 1");
     }
     
     private void work1() {
@@ -35,8 +35,8 @@ private final MemberService memberService;
         Member member = memberService.findById(1);
         if (member == null) return;
         Question question1 = questionService.write(member,"주제 1", "내용 1");
-        answerService.write(member, question1, "답변 1");
-        answerService.write(member, question1, "답변 2");
+        answerService.write("답변 1", question1);
+        answerService.write("답변 2", question1);
         questionService.write(member,"주제 2", "내용 2");
         questionService.write(member,"주제 3", "내용 3");
     }
