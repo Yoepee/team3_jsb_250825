@@ -4,6 +4,7 @@ import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repository.QuestionRepository;
+import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

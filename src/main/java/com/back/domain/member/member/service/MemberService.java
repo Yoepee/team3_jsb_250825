@@ -10,7 +10,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+  private final PasswordEncoder passwordEncoder;
+
+    public void create(String username, String password, String nickname) {
+        Member member = new Member(username, password, nickname);
+        memberRepository.save(member);
+    }
 
     public boolean signin(String username, String password) {
         Member findMember = memberExist(username);

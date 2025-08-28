@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.*;
 public class QuestionController {
     private final QuestionService questionService;
 
+@PostMapping("/list/delete/{id}")
+    public String deleteQuestion(@PathVariable int id) {
+        questionService.deleteById(id);
+        return "redirect:/list";
+    }
+  
     @GetMapping("/question")
     public String question(Model model) {
         model.addAttribute("questions", questionService.findAll());
@@ -30,12 +36,6 @@ public class QuestionController {
     public String questionWriteSubmit(@RequestParam String subject,
                                    @RequestParam String content) {
         questionService.write(subject, content);
-        return "redirect:/question";
-    }
-
-    @PostMapping("/question/delete/{id}")
-    public String questionDelete(@PathVariable int id) {
-        questionService.deleteById(id);
         return "redirect:/question";
     }
 
