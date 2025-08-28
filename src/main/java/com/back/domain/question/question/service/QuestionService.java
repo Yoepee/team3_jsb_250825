@@ -1,6 +1,7 @@
 package com.back.domain.question.question.service;
 
 import com.back.domain.answer.answer.entity.Answer;
+import com.back.domain.member.member.entity.Member;
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -50,5 +51,13 @@ public class QuestionService {
 
     public List<Question> findQuestionsBySubject(String subject) {
         return questionRepository.findBySubjectContaining(subject);
+      
+  public Question write(Member member, String subject, String content) {
+        Question question = new Question(member, subject, content);
+        return questionRepository.save(question);
+    }
+
+    public List<Question> findByAll() {
+        return questionRepository.findAll();
     }
 }

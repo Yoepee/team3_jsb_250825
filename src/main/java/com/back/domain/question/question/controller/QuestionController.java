@@ -1,13 +1,19 @@
 package com.back.domain.question.question.controller;
 
+import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/questions")
 public class QuestionController {
     private final QuestionService questionService;
 
@@ -17,13 +23,6 @@ public class QuestionController {
         return "question/question";
     }
 
-    @GetMapping("/question/{id}")
-    public String questionDetail(@PathVariable int id, Model model) {
-        model.addAttribute("question", questionService.findById(id));
-        model.addAttribute("answers",
-                questionService.findAllAnswersByQuestionId(id));
-        return "question/questionDetail";
-    }
 
     @GetMapping("/question/write")
     public String questionWrite(Model model) {
@@ -61,5 +60,13 @@ public class QuestionController {
     public String questionSearch(@RequestParam String keyword, Model model) {
         model.addAttribute("questions", questionService.findQuestionsBySubject(keyword));
         return "question/question";
+
+
+    @GetMapping("/{id}/detail")
+    @Transactional(readOnly = true)
+    public String showDetail(@PathVariable int id, Model model) {
+        Question question = questionService.findById(id);
+        model.addAttribute("question", question);
+        return "question/question/detail";
     }
 }

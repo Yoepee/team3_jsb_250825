@@ -1,5 +1,9 @@
 package com.back.global.initData;
 
+import com.back.domain.answer.answer.service.AnswerService;
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.service.MemberService;
+import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
@@ -9,18 +13,32 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 public class BaseInitData {
+private final MemberService memberService;
     private final QuestionService questionService;
+    private final AnswerService answerService;
     @Bean
     ApplicationRunner initApplicationRunner() {
         return args -> {
-            if (questionService.count() > 0 ) return;
+            work0();
             work1();
             work2();
         };
     }
+
+    private void work0() {
+        if (memberService.count() > 0) return;
+        Member member = memberService.join("user1", "1234", "유저 1");
+    }
     
     private void work1() {
-        System.out.println("실행 테스트");
+        if (questionService.count() > 0) return;
+        Member member = memberService.findById(1);
+        if (member == null) return;
+        Question question1 = questionService.write(member,"주제 1", "내용 1");
+        answerService.write(member, question1, "답변 1");
+        answerService.write(member, question1, "답변 2");
+        questionService.write(member,"주제 2", "내용 2");
+        questionService.write(member,"주제 3", "내용 3");
     }
     private void work2() {
 
