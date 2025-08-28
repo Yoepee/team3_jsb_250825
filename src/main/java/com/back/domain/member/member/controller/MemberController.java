@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MemberController {
     private final MemberService memberService;
 
+
     @GetMapping("/signup")
     public String signup() {
         return "signup";
@@ -28,5 +29,20 @@ public class MemberController {
         } catch (Exception e) {
             return "signup";
         }
+    }
+  
+    @GetMapping("/")
+    public String redirect() {
+        return "member/signin";
+    }
+
+    @GetMapping("/signin")
+    public String signin() {
+        return "member/signin";
+    }
+
+    @PostMapping("/signin")
+    public String login(String username, String password) {
+        return memberService.signin(username, password) ? "redirect:/question" : "redirect:/signin";
     }
 }
