@@ -1,0 +1,20 @@
+<div>
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="question:${questions}" th:object="${question}">
+            <td th:text="${question.id}"></td>
+            <td>
+                <a th:href="@{|/questions/${question.id}/detail|}" th:text="${question.subject}"></a>
+            </td>
+            <td th:text="${#temporals.format(question.createdDate, 'yy.MM.dd')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
