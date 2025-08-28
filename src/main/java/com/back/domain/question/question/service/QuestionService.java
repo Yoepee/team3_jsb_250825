@@ -11,7 +11,7 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
 
     @Transactional
-    public void deleteQuestion(Integer id) {
+    public void deleteById(int id) {
         questionRepository.deleteById(id);
     }
 
