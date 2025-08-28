@@ -8,17 +8,24 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
 @NoArgsConstructor
 public class Answer extends BaseEntity {
+    @Setter
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
     @ManyToOne(fetch = FetchType.LAZY)
     private Member author;
-
+  
+    public Answer(String content, Question question) {
+        this.content = content;
+        this.question = question;
+    }
+  
     public Answer(Member author, Question question, String content){
         this.author = author;
         this.question = question;

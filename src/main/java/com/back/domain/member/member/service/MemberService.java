@@ -3,23 +3,28 @@ package com.back.domain.member.member.service;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public long count() {
-        return memberRepository.count();
+    public boolean signin(String username, String password) {
+        Member findMember = memberExist(username);
+        if (findMember == null) return false;
+        else return passwordEncoder.matches(password, findMember.getPassword());
     }
 
-    public Member join(String username, String password, String nickname) {
-        Member member = new Member(username, password, nickname);
-        return memberRepository.save(member);
+    public void save(String username, String password, String nickname) {
+        String encodePassword = passwordEncoder.encode(password);
+        Member newMember = new Member(username, encodePassword, nickname);
+        memberRepository.save(newMember);
     }
-    
-    public Member findById(int id){
-        return memberRepository.findById(id).orElseThrow(() -> new RuntimeException("계정 불러오기 오류"));
+
+    public Member memberExist(String username) {
+        return memberRepository.findByUsername(username).orElse(null);
     }
 }

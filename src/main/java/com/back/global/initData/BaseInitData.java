@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 public class BaseInitData {
-    private final MemberService memberService;
+private final MemberService memberService;
     private final QuestionService questionService;
     private final AnswerService answerService;
     @Bean
@@ -21,6 +21,7 @@ public class BaseInitData {
         return args -> {
             work0();
             work1();
+            work2();
         };
     }
 
@@ -38,5 +39,12 @@ public class BaseInitData {
         answerService.write(member, question1, "답변 2");
         questionService.write(member,"주제 2", "내용 2");
         questionService.write(member,"주제 3", "내용 3");
+    }
+    private void work2() {
+
+        questionService.write("제목 1", "내용 1");
+        questionService.write("제목 2", "내용 2");
+        questionService.write("제목 3", "내용 3");
+        questionService.write("제목 4", "내용 4");
     }
 }
