@@ -19,9 +19,9 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestParam String username,
-                         @RequestParam String password,
-                         @RequestParam String nickname) {
+    public String signup(@RequestParam (value = "username", required = true) String username,
+                         @RequestParam (value = "password", required = true) String password,
+                         @RequestParam (value = "nickname", required = true) String nickname) {
         try {
             memberService.create(username, password, nickname);
             return "redirect:/signin";
