@@ -23,6 +23,7 @@ public class Question extends BaseEntity {
     @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<Answer> answerList = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = true)
     private Member author;
 
     public Question(String subject, String content) {

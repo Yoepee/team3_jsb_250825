@@ -1,38 +1,74 @@
-<div sec:authorize="!isAuthenticated()">
-    <a href="/signup">회원가입</a>
-    <a href="/login">로그인</a>
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="mx-auto max-w-5xl px-4 my-10">
+    <main class="space-y-6">
+        <!-- 헤더 -->
+        <div class="flex items-end justify-between">
+            <div>
+                <h3 class="text-xl font-semibold">게시글 목록</h3>
+                <p class="mt-1 text-sm text-gray-500" th:text="'총 ' + ${#lists.size(questions)} + '건'">총 0건</p>
+            </div>
+            <a
+                    th:href="@{/questions/create}"
+                    class="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-white font-medium shadow-sm transition hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            >
+                글쓰기
+            </a>
+        </div>
+
+        <!-- 검색 폼 -->
+        <form th:action="@{/question/list}" method="get"
+              class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_auto] rounded-2xl border bg-white/80 backdrop-blur p-4">
+            <input
+                    name="kw"
+                    type="text"
+                    placeholder="검색어 입력"
+                    class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+            />
+            <select
+                    name="kwType"
+                    class="rounded-xl border border-gray-300 bg-white px-3 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+            >
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+            </select>
+            <button
+                    type="submit"
+                    class="rounded-xl bg-gray-900 px-4 py-3 text-white font-medium shadow-sm transition hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+            >
+                검색
+            </button>
+        </form>
+
+        <!-- 리스트 테이블 -->
+        <div class="overflow-x-auto rounded-2xl border bg-white/80 backdrop-blur">
+            <table class="min-w-full text-sm">
+                <thead class="bg-gray-50 text-gray-600">
+                <tr>
+                    <th class="px-6 py-3 text-left font-medium">번호</th>
+                    <th class="px-6 py-3 text-left font-medium">제목</th>
+                    <th class="px-6 py-3 text-left font-medium">작성일</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                <tr th:each="question, loop : ${questions}" class="hover:bg-gray-50">
+                    <td class="px-6 py-3" th:text="${loop.index + 1}"></td>
+                    <td class="px-6 py-3">
+                        <a
+                                class="block truncate text-indigo-600 hover:underline"
+                                th:href="@{/questions/detail/{questionId}(questionId=${question.id})}"
+                                th:text="${question.subject}"
+                        ></a>
+                    </td>
+                    <td class="px-6 py-3" th:text="${#temporals.format(question.createdDate, 'yyyy.MM.dd | HH:mm')}"></td>
+                </tr>
+
+                <!-- 비어있을 때 -->
+                <tr th:if="${#lists.isEmpty(questions)}">
+                    <td colspan="3" class="px-6 py-10 text-center text-gray-500">게시글이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
 </div>
-
-<main>
-    <h3>게시글 목록</h3>
-
-    <form action="/question/list" method="get">
-        <input name="kw" placeholder="검색어 입력" type="text"/>
-        <select name="kwType">
-            <option value="title">제목</option>
-            <option value="content">내용</option>
-        </select>
-        <button type="submit">검색</button>
-    </form>
-
-    <table class="board-list">
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성일</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="question, loop : ${questions}">
-            <td th:text="${loop.index + 1}"></td>
-            <td><a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a></td>
-            <td th:text="${#temporals.format(question.createdDate, 'yyyy.MM.dd | HH:mm')}"></td>
-        </tr>
-        </tbody>
-    </table>
-</main>
-<br>
-<div>
-    <a href="/question/create">글쓰기</a>
-</div>
+</html>

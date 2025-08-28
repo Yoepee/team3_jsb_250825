@@ -1,13 +1,35 @@
-<nav th:fragment="navbarFragment">
-    <ul>
-        <li>
-            <a sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
+<header class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur border-b border-gray-200"
+        th:fragment="navbarFragment">
+    <div class="max-w-7xl mx-auto h-14 flex items-center justify-between px-4">
+        <!-- 브랜드 -->
+        <a th:href="@{/questions/list}" class="flex items-center gap-2">
+            <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-indigo-600 text-white font-semibold">JSB</span>
+            <span class="text-gray-900 font-semibold">Team π</span>
+        </a>
+        <div class="flex items-center gap-3">
+            <!-- 로그인 전 -->
+            <a sec:authorize="isAnonymous()" th:href="@{/login}"
+               class="rounded-lg border px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+                로그인
+            </a>
+            <a sec:authorize="isAnonymous()" th:href="@{/signup}"
+               class="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white hover:bg-indigo-700">
+                회원가입
+            </a>
 
-            <a sec:authorize="isAuthenticated()" href="#"
-               onclick="document.getElementById('logoutForm').submit();">로그아웃</a>
-            <form id="logoutForm" th:action="@{/member/logout}" method="post">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <!-- 로그인 후 -->
+            <span sec:authorize="isAuthenticated()" class="hidden sm:inline text-sm text-gray-600">
+        안녕하세요, <strong sec:authentication="name" class="text-gray-800 font-medium">user</strong>님
+      </span>
+            <form id="logoutForm" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit"
+                        class="rounded-lg border px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+                    로그아웃
+                </button>
+                <!-- _csrf가 없을 때 템플릿 에러 방지 -->
+                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}"
+                       th:value="${_csrf.token}"/>
             </form>
-        </li>
-    </ul>
-</nav>
+        </div>
+    </div>
+</header>

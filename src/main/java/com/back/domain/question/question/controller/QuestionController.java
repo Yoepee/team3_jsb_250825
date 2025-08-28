@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
 import java.util.List;
 
-@RequestMapping("/question")
+@RequestMapping("/questions")
 @Controller
 @RequiredArgsConstructor
 public class QuestionController {
@@ -41,16 +41,14 @@ public class QuestionController {
     @PostMapping("/create")
     @Transactional
     public String create(@ModelAttribute("form") @Valid QuestionForm form,
-                         BindingResult bindingResult,
-                         Model model) {
+                         BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return "question/question/question_form";
         }
 
         Question question = questionService.create(form.getSubject(), form.getContent());
-        model.addAttribute("question", question);
 
-        return "redirect:/questions";
+        return "redirect:/questions/detail/%d".formatted(question.getId());
     }
   
     @Transactional(readOnly = true)
@@ -61,24 +59,24 @@ public class QuestionController {
         return "question/question/list";
     }
 
-    @PostMapping("/list/delete/{id}")
+    @PostMapping("/delete/{id}")
     public String deleteQuestion(@PathVariable int id) {
         questionService.deleteById(id);
-        return "redirect:/list";
+        return "redirect:/questions/list";
     }
 
-    @GetMapping("/question/update/{id}")
+    @GetMapping("/update/{id}")
     public String questionUpdate(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findById(id));
         return "question/questionUpdate";
     }
 
-    @PostMapping("/question/update/{id}")
+    @PostMapping("/update/{id}")
     public String questionUpdateSubmit(@RequestParam String subject,
                                     @RequestParam String content,
                                     @PathVariable int id) {
         questionService.updateById(id, subject, content);
-        return "redirect:/question";
+        return "redirect:/questions/detail/%d".formatted(id);
     }
 
     @PostMapping("/question/search")
@@ -87,7 +85,7 @@ public class QuestionController {
         return "question/question";
     }
 
-    @GetMapping("/{id}/detail")
+    @GetMapping("/detail/{id}")
     @Transactional(readOnly = true)
     public String showDetail(@PathVariable int id, Model model) {
         Question question = questionService.findById(id);

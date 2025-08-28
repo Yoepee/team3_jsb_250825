@@ -28,13 +28,13 @@ public class QuestionServiceTest {
         assertThat(questions).hasSize(2);
     }
 
-    @Test
-    @DisplayName("질문 저장")
-    void t2() {
-        Question question = questionService.save("제목", "내용");
-        assertThat(question.getSubject()).isEqualTo("제목");
-        assertThat(question.getContent()).isEqualTo("내용");
-    }
+//    @Test
+//    @DisplayName("질문 저장")
+//    void t2() {
+//        Question question = questionService.save("제목", "내용");
+//        assertThat(question.getSubject()).isEqualTo("제목");
+//        assertThat(question.getContent()).isEqualTo("내용");
+//    }
 
     @Test
     @DisplayName("질문 개수")

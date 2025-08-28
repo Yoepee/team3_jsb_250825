@@ -14,6 +14,7 @@ public class MemberService {
 
     public void create(String username, String password, String nickname) {
         Member member = new Member(username, password, nickname);
+        member.encodePassword(passwordEncoder);
         memberRepository.save(member);
     }
 

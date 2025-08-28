@@ -1,21 +1,14 @@
 package com.back.domain.answer.answer.controller;
 
-import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.answer.answer.dto.DeleteAnswerCommand;
+import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.answer.answer.service.AnswerService;
 import com.back.domain.question.question.service.QuestionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,11 +17,11 @@ public class AnswerController {
     private final AnswerService answerService;
     private final QuestionService questionService;
 
-    @PostMapping("/answer/write/{questionId}")
+    @PostMapping("/write/{questionId}")
     public String answerWrite(@PathVariable int questionId,
                               @RequestParam String content) {
         answerService.write(content, questionService.findById(questionId));
-        return "redirect:/question/" + questionId;
+        return "redirect:/questions/detail/" + questionId;
     }
 
     @GetMapping("/answer/update/{answerId}") // url에서 바로 넘겨주도록 테스트하기 위한 용도로 GET 설정
@@ -39,21 +32,21 @@ public class AnswerController {
         return "redirect:/question";
     }
   
-    @PutMapping("/{id}/edit")
+    @PostMapping("/update/{id}")
     public Answer modifyAnswer(@PathVariable int id, @RequestBody String editContent) {
         return answerService.modify(id,editContent);
     }
 
-   @PostMapping("/{id}/delete")
+   @PostMapping("/delete/{id}")
     public String delete(
             @PathVariable int id,
             @ModelAttribute("form") @Valid DeleteAnswerCommand deleteAnswerCommand,
             BindingResult bindingResult
     ) {
         if(bindingResult.hasErrors()) {
-            return "redirect:/questions/%d/detail".formatted(deleteAnswerCommand.getQuestionId());
+            return "redirect:/questions/detail/%d".formatted(deleteAnswerCommand.getQuestionId());
         }
         answerService.delete(id);
-        return "redirect:/questions/%d/detail".formatted(deleteAnswerCommand.getQuestionId());
+        return "redirect:/questions/detail/%d".formatted(deleteAnswerCommand.getQuestionId());
     }
 }

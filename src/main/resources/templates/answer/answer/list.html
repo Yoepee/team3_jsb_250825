@@ -1,12 +1,100 @@
-<div th:fragment="answerList(question)">
-    <h3>답변 목록</h3>
-    <div th:each="answer : ${question.answerList}" th:object="${answer}">
-        <p>내용 : [[${answer.content}]]</p>
-        <p>작성일 : [[${#temporals.format(answer.createdDate, 'yy.MM.dd HH:mm:ss')}]]</p>
-        <p>작성자 : [[${answer.author.nickname}]]</p>
-        <form th:action="@{/answers/{aid}/delete(aid=${answer.id})}" method="post" th:object="${form}">
-            <input type="hidden" name="questionId" th:value="${question.id}">
-            <button type="submit">삭제</button>
+`
+<div th:fragment="answerList(question)" class="space-y-6">
+    <!-- 답변 작성 -->
+    <div class="rounded-2xl border bg-white/80 backdrop-blur p-6">
+        <h3 class="text-lg font-semibold mb-4">답변 작성</h3>
+        <form th:action="@{/answers/write/{questionId}(questionId=${question.id})}" method="post" class="space-y-3">
+      <textarea
+              name="content"
+              rows="4"
+              placeholder="답변을 입력하세요…"
+              required
+              class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+      ></textarea>
+            <div class="flex justify-end">
+                <button
+                        type="submit"
+                        class="rounded-xl bg-indigo-600 px-4 py-2 text-white font-medium shadow-sm transition hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                >
+                    답변 등록
+                </button>
+            </div>
         </form>
     </div>
-</div>
+
+    <!-- 목록 헤더 -->
+    <div class="flex items-end justify-between">
+        <h3 class="text-lg font-semibold">답변 목록</h3>
+        <span class="text-sm text-gray-500" th:text="'총 ' + ${#lists.size(question.answerList)} + '개'">총 0개</span>
+    </div>
+
+    <!-- 목록 -->
+    <div class="space-y-4">
+        <!-- 비어있을 때 -->
+        <div th:if="${#lists.isEmpty(question.answerList)}"
+             class="rounded-2xl border bg-white/60 p-6 text-center text-gray-500">
+            아직 등록된 답변이 없습니다.
+        </div>
+
+        <!-- 아이템 -->
+        <div th:each="answer : ${question.answerList}" th:object="${answer}"
+             class="rounded-2xl border bg-white/80 backdrop-blur p-5">
+            <!-- 메타 -->
+            <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                <span>작성자 : [[${answer?.author?.nickname}]]</span>
+                <span class="hidden sm:inline">•</span>
+                <span>작성일 : [[${#temporals?.format(answer?.createdDate, 'yy.MM.dd HH:mm:ss')}]]</span>
+            </div>
+
+            <!-- 내용 -->
+            <div class="mt-3 text-gray-800 leading-7 whitespace-pre-wrap" th:text="*{content}">
+                내용
+            </div>
+
+            <!-- 액션 -->
+            <div class="mt-4 flex items-start gap-2">
+                <!-- 수정 (details로 토글) -->
+                <details class="group flex-1 min-w-0">
+                    <summary
+                            class="inline-flex cursor-pointer select-none items-center gap-2 rounded-xl border px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
+                        수정
+                    </summary>
+                    <div class="mt-3 rounded-xl border bg-white p-4">
+                        <form th:action="@{/answers/update/{answerId}(answerId=*{id})}" method="post" class="space-y-3">
+        <textarea
+                name="content"
+                rows="4"
+                th:text="*{content}"
+                required
+                class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"></textarea>
+                            <div class="flex items-center justify-end gap-2">
+                                <button type="submit"
+                                        class="rounded-xl bg-gray-900 px-4 py-2 text-white text-sm font-medium shadow-sm transition hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900">
+                                    저장
+                                </button>
+                                <button type="button" onclick="this.closest('details').removeAttribute('open')"
+                                        class="rounded-xl border px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                    취소
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </details>
+
+                <!-- 삭제 -->
+                <form
+                        th:action="@{/answers/delete/{answerId}(answerId=*{id})}"
+                        method="post"
+                        onsubmit="return confirm('이 답변을 삭제하시겠어요?');"
+                        class="ml-auto shrink-0">
+                    <input type="hidden" name="questionId" th:value="${question.id}">
+                    <button
+                            type="submit"
+                            class="inline-flex items-center whitespace-nowrap rounded-xl bg-red-600 px-3 py-1.5 text-white text-sm font-medium shadow-sm transition hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500">
+                        삭제
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>`
