@@ -26,12 +26,11 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 //                        .requestMatchers("/**").permitAll()
-                                .requestMatchers(
-                                        "/", "/login", "/signup", "/questions/list"
-                                        , "/css/**", "/js/**", "/resources/**", "/error", "/favicon.ico"
-                                ).permitAll()
-                                .requestMatchers(HttpMethod.GET, "/questions/detail/**").permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/", "/login", "/signup", "/questions/list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/questions/detail/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/resources/**", "/error", "/favicon.ico").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**")
