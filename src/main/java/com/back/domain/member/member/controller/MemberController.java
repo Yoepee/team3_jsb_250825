@@ -27,6 +27,12 @@ public class MemberController {
         return "member/member/login_form";
     }
 
+    @PostMapping("/login")
+    public String login() {
+
+        return "redirect:/questions/list";
+    }
+
     @GetMapping("/signup")
     public String signup() {
         return "signup";

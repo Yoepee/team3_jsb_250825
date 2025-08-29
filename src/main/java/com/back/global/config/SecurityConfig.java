@@ -29,7 +29,7 @@ public class SecurityConfig {
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
                 .formLogin((formLogin) -> formLogin
-                        .loginPage("/login")
+                        .loginPage("/member/login")
 //                        .defaultSuccessUrl("/")
                         .defaultSuccessUrl("/question/create") // TODO 성공 시 메인페이지로 이동
                         .failureHandler(customAuthenticationFailureHandler))
