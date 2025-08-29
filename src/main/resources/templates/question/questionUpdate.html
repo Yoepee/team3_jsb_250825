@@ -1,18 +1,52 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content">
-    <h1>글 수정하기</h1>
-    <form method="post">
-      <div>
-        <label for="subject">제목</label><br>
-        <input type="text" id="subject" name="subject" placeholder="수정할 제목을 입력해주세요." required>
-      </div>
-      <div>
-        <label for="content">내용</label><br>
-        <input type="text" id="content" name="content" placeholder="수정할 내용을 입력해주세요." required>
-      </div>
-      <div>
-        <button type="submit">수정하기</button>
-      </div>
-    </form>
+<div layout:fragment="content" class="mx-auto max-w-2xl px-4 my-10">
+    <div class="bg-white/80 backdrop-blur border rounded-2xl shadow-sm p-8">
+        <header class="mb-6">
+            <h2 class="text-2xl font-semibold tracking-tight">질문 수정</h2>
+            <p class="mt-1 text-sm text-gray-500">궁금한 내용을 자세히 적어주세요.</p>
+        </header>
+
+        <form method="post" th:object="${question}" class="space-y-5">
+            <!-- 제목 -->
+            <div>
+                <label for="subject" class="block text-sm font-medium text-gray-700">제목</label>
+                <input
+                        id="subject"
+                        type="text"
+                        th:field="*{subject}"
+                        placeholder="제목"
+                        autofocus
+                        required
+                        class="mt-2 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                />
+                <p class="mt-2 text-xs text-red-600" th:if="${#fields.hasErrors('subject')}" th:errors="*{subject}">제목 오류</p>
+            </div>
+            <div>
+                <label for="content" class="block text-sm font-medium text-gray-700">내용</label>
+                <textarea
+                        id="content"
+                        name="content"
+                        th:field="*{content}"
+                        placeholder="내용"
+                        rows="8"
+                        required
+                        class="mt-2 w-full resize-y rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                ></textarea>
+                <p class="mt-2 text-xs text-red-600" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">내용 오류</p>
+            </div>
+            <!-- 액션 -->
+            <div class="pt-2 flex items-center gap-3">
+                <input
+                        type="submit"
+                        value="수정하기"
+                        class="cursor-pointer rounded-xl bg-indigo-600 px-5 py-3 text-white font-medium shadow-sm transition hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                />
+                <a th:href="@{/questions/list}"
+                   class="rounded-xl border px-5 py-3 text-gray-700 hover:bg-gray-50">
+                    목록으로
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
 </html>
