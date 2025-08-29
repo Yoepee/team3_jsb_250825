@@ -1,7 +1,6 @@
 package com.back.domain.answer.answer.controller;
 
 import com.back.domain.answer.answer.dto.DeleteAnswerCommand;
-import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.answer.answer.service.AnswerService;
 import com.back.domain.question.question.service.QuestionService;
 import jakarta.validation.Valid;
@@ -24,17 +23,10 @@ public class AnswerController {
         return "redirect:/questions/detail/" + questionId;
     }
 
-    @GetMapping("/answer/update/{answerId}") // url에서 바로 넘겨주도록 테스트하기 위한 용도로 GET 설정
-//    @PostMapping("/answer/update/{answerId}")
-    public String answerUpdate(@PathVariable int answerId,
-                               @RequestParam String content) {
-        answerService.update(content, answerId);
-        return "redirect:/question";
-    }
-  
     @PostMapping("/update/{id}")
-    public Answer modifyAnswer(@PathVariable int id, @RequestBody String editContent) {
-        return answerService.modify(id,editContent);
+    public String modifyAnswer(@PathVariable int id, @RequestParam String content) {
+        answerService.modify(id, content);
+        return "redirect:/questions/detail/%d".formatted(answerService.findById(id).getQuestion().getId());
     }
 
    @PostMapping("/delete/{id}")
