@@ -53,8 +53,16 @@ public class QuestionController {
   
     @Transactional(readOnly = true)
     @GetMapping("/list")
-    public String showList(Model model) {
-        List<Question> questions = questionService.findAll();
+    public String showList(Model model,
+                           @RequestParam(required = false) String kwType,
+                           @RequestParam(required = false) String kw
+    ) {
+        List<Question> questions;
+        if (kwType != null && kw != null && !kw.isEmpty()) {
+            questions = questionService.search(kwType, kw);
+        } else {
+            questions = questionService.findAll();
+        }
         model.addAttribute("questions", questions);
         return "question/question/list";
     }

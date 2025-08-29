@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <div layout:fragment="content" class="mx-auto max-w-5xl px-4 my-10">
     <main class="space-y-6">
         <!-- 헤더 -->
@@ -16,7 +16,7 @@
         </div>
 
         <!-- 검색 폼 -->
-        <form th:action="@{/question/list}" method="get"
+        <form th:action="@{/questions/list}" method="get"
               class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_auto] rounded-2xl border bg-white/80 backdrop-blur p-4">
             <input
                     name="kw"
