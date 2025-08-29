@@ -18,21 +18,6 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
 
-    @GetMapping("/search/{kwType}/{kw}")
-    public String search(@PathVariable String kwType, @PathVariable String kw, Model model) {
-        List<Question> questions = questionService.search(kwType, kw);
-        model.addAttribute("questions", questions);
-        return "question/question/search"; // resources/templates/question/search.html
-    }
-
-    @GetMapping("/search")
-    public String searchByParam(@RequestParam String kwType, @RequestParam String kw, Model model) {
-        List<Question> questions = questionService.search(kwType, kw);
-        model.addAttribute("questions", questions);
-        return "question/question/search";
-    }
-
-
     @GetMapping("/create")
     public String showCreate(@ModelAttribute("form") QuestionForm form) {
         return "question/question/question_form";
@@ -53,8 +38,16 @@ public class QuestionController {
   
     @Transactional(readOnly = true)
     @GetMapping("/list")
-    public String showList(Model model) {
-        List<Question> questions = questionService.findAll();
+    public String showList(Model model,
+                           @RequestParam(required = false) String kwType,
+                           @RequestParam(required = false) String kw
+    ) {
+        List<Question> questions;
+        if (kwType != null && kw != null && !kw.isEmpty()) {
+            questions = questionService.search(kwType, kw);
+        } else {
+            questions = questionService.findAll();
+        }
         model.addAttribute("questions", questions);
         return "question/question/list";
     }
@@ -77,12 +70,6 @@ public class QuestionController {
                                     @PathVariable int id) {
         questionService.updateById(id, subject, content);
         return "redirect:/questions/detail/%d".formatted(id);
-    }
-
-    @PostMapping("/question/search")
-    public String questionSearch(@RequestParam String keyword, Model model) {
-        model.addAttribute("questions", questionService.findQuestionsBySubject(keyword));
-        return "question/question";
     }
 
     @GetMapping("/detail/{id}")

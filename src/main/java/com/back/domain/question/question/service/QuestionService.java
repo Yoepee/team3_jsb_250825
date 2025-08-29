@@ -70,7 +70,7 @@ public class QuestionService {
         } else if ("content".equals(kwType)) {
             return questionRepository.findByContentContaining(kw);
         } else {
-            return questionRepository.findBySubjectOrContentContaining(kw, kw);
+            return questionRepository.findBySubjectContainingOrContentContaining(kw, kw);
         }
     }
 }
