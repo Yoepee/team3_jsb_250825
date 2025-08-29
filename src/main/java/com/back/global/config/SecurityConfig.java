@@ -1,10 +1,10 @@
 package com.back.global.config;
 
+import com.back.domain.member.member.service.MemberSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,28 +17,33 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final MemberSecurityService memberSecurityService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/**").permitAll())
+                        .requestMatchers("/**").permitAll()
+                )
                 .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers("/h2-console/**"))
+                        .ignoringRequestMatchers("/h2-console/**")
+                )
                 .headers((headers) -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
+                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                )
                 .formLogin((formLogin) -> formLogin
-                        .loginPage("/member/login")
-//                        .defaultSuccessUrl("/")
-                        .defaultSuccessUrl("/question/create") // TODO 성공 시 메인페이지로 이동
-                        .failureHandler(customAuthenticationFailureHandler))
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/questions/list") // TODO 성공 시 메인페이지로 이동
+                        .failureHandler(customAuthenticationFailureHandler)
+                        .permitAll()
+                )
                 .logout((logout) -> logout
-                        .logoutUrl("/member/logout")
-//                        .logoutSuccessUrl("/")
-                        .logoutSuccessUrl("/question/create") // TODO 성공 시 메인페이지로 이동
-                        .invalidateHttpSession(true))
-        ;
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/questions/list") // TODO 성공 시 메인페이지로 이동
+                        .invalidateHttpSession(true)
+                );
 
         return http.build();
     }
@@ -48,8 +53,17 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+//    @Bean
+//    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+//        return authenticationConfiguration.getAuthenticationManager();
+//    }
+
+    // 명시적 Provider 빈
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(memberSecurityService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
     }
 }
