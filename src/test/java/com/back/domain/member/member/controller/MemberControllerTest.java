@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -29,9 +30,9 @@ class MemberControllerTest {
     @Test
     @DisplayName("로그인")
     void t1() throws Exception {
-        mockMvc.perform(formLogin("/member/login")
-                        .user("test123")
-                        .password("123"))
+        mockMvc.perform(formLogin("/login")
+                        .user("user1")
+                        .password("1234"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
     }
@@ -39,8 +40,22 @@ class MemberControllerTest {
     @Test
     @DisplayName("로그아웃")
     void t2() throws Exception {
-        mockMvc.perform(post("/member/logout").with(csrf()))
+        mockMvc.perform(post("/logout").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
+    }
+
+    @Test
+    @DisplayName("로그인 후 이전 페이지로 리다이렉션")
+    void t3() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/questions/create"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+
+        mockMvc.perform(formLogin()
+                        .user("user1")
+                        .password("1234"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/questions/create"));
     }
 }

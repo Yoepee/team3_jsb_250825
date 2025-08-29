@@ -4,6 +4,7 @@ import com.back.domain.member.member.service.MemberSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,25 +24,30 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authenticationProvider(authenticationProvider())
-                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/**").permitAll()
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+//                        .requestMatchers("/**").permitAll()
+                                .requestMatchers(
+                                        "/", "/login", "/signup", "/questions/list"
+                                        , "/css/**", "/js/**", "/resources/**", "/error", "/favicon.ico"
+                                ).permitAll()
+                                .requestMatchers(HttpMethod.GET, "/questions/detail/**").permitAll()
+                                .anyRequest().authenticated()
                 )
-                .csrf((csrf) -> csrf
+                .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**")
                 )
-                .headers((headers) -> headers
+                .headers(headers -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
                 )
-                .formLogin((formLogin) -> formLogin
+                .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/questions/list") // TODO 성공 시 메인페이지로 이동
+                        .defaultSuccessUrl("/", false)
                         .failureHandler(customAuthenticationFailureHandler)
-                        .permitAll()
                 )
-                .logout((logout) -> logout
+                .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/questions/list") // TODO 성공 시 메인페이지로 이동
+                        .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                 );
 
