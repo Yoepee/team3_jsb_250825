@@ -5,11 +5,14 @@ import com.back.domain.question.question.model.QuestionForm;
 import com.back.domain.question.question.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequestMapping("/questions")
@@ -26,16 +29,21 @@ public class QuestionController {
     @PostMapping("/create")
     @Transactional
     public String create(@ModelAttribute("form") @Valid QuestionForm form,
-                         BindingResult bindingResult) {
-        if(bindingResult.hasErrors()) {
+                         BindingResult bindingResult,
+                         @AuthenticationPrincipal UserDetails currentUser) {
+        if (bindingResult.hasErrors()) {
             return "question/question/question_form";
         }
 
-        Question question = questionService.create(form.getSubject(), form.getContent());
+        if (currentUser == null) {
+            return "redirect:/login";
+        }
+
+        Question question = questionService.create(form.getSubject(), form.getContent(), currentUser.getUsername());
 
         return "redirect:/questions/detail/%d".formatted(question.getId());
     }
-  
+
     @Transactional(readOnly = true)
     @GetMapping("/list")
     public String showList(Model model,
