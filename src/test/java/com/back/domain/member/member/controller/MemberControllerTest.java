@@ -29,9 +29,9 @@ class MemberControllerTest {
     @Test
     @DisplayName("로그인")
     void t1() throws Exception {
-        mockMvc.perform(formLogin("/member/login")
-                        .user("test123")
-                        .password("123"))
+        mockMvc.perform(formLogin("/login")
+                        .user("user1")
+                        .password("1234"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
     }
@@ -39,7 +39,7 @@ class MemberControllerTest {
     @Test
     @DisplayName("로그아웃")
     void t2() throws Exception {
-        mockMvc.perform(post("/member/logout").with(csrf()))
+        mockMvc.perform(post("/logout").with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
     }

@@ -2,9 +2,9 @@ package com.back.domain.question.question.service;
 
 import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.repository.MemberRepository;
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repository.QuestionRepository;
-import jakarta.transaction.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
-  public Question create(String subject, String content) {
-        Question question = new Question(subject, content);
+    private final MemberRepository memberRepository;
 
+    public Question create(String subject, String content, String username) {
+        Member author = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        Question question = new Question(author, subject, content);
         return questionRepository.save(question);
     }
 
@@ -58,14 +62,14 @@ public class QuestionService {
     public List<Question> findQuestionsBySubject(String subject) {
         return questionRepository.findBySubjectContaining(subject);
     }
-      
-  public Question write(Member member, String subject, String content) {
+
+    public Question write(Member member, String subject, String content) {
         Question question = new Question(member, subject, content);
         return questionRepository.save(question);
     }
 
     public List<Question> search(String kwType, String kw) {
-        if("subject".equals(kwType)) {
+        if ("subject".equals(kwType)) {
             return questionRepository.findBySubjectContaining(kw);
         } else if ("content".equals(kwType)) {
             return questionRepository.findByContentContaining(kw);

@@ -17,7 +17,7 @@ public class MemberController {
     private final MemberService memberService;
   
     @GetMapping("/login")
-    public String login(HttpSession session, Model model) {
+    public String showLogin(HttpSession session, Model model) {
         Object exception = session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         if (exception instanceof String) {
             model.addAttribute("errorMessage", exception);
@@ -25,12 +25,6 @@ public class MemberController {
         }
 
         return "member/member/login_form";
-    }
-
-    @PostMapping("/login")
-    public String login() {
-
-        return "redirect:/questions/list";
     }
 
     @GetMapping("/signup")

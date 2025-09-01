@@ -21,24 +21,31 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/**").permitAll())
-                .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers("/h2-console/**"))
-                .headers((headers) -> headers
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/h2-console/**").permitAll()
+//                        .requestMatchers("/", "/login", "/signup", "/questions/list").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/questions/detail/**").permitAll()
+//                        .requestMatchers("/css/**", "/js/**", "/resources/**", "/error", "/favicon.ico").permitAll()
+//                        .anyRequest().authenticated()
+                )
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**")
+                )
+                .headers(headers -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
-                .formLogin((formLogin) -> formLogin
-                        .loginPage("/member/login")
-//                        .defaultSuccessUrl("/")
-                        .defaultSuccessUrl("/question/create") // TODO 성공 시 메인페이지로 이동
-                        .failureHandler(customAuthenticationFailureHandler))
-                .logout((logout) -> logout
-                        .logoutUrl("/member/logout")
-//                        .logoutSuccessUrl("/")
-                        .logoutSuccessUrl("/question/create") // TODO 성공 시 메인페이지로 이동
-                        .invalidateHttpSession(true))
-        ;
+                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))
+                )
+                .formLogin(formLogin -> formLogin
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", false)
+                        .failureHandler(customAuthenticationFailureHandler)
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                );
 
         return http.build();
     }
