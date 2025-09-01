@@ -1,11 +1,11 @@
 package com.back.global.config;
 
-import com.back.domain.member.member.service.MemberSecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,12 +18,10 @@ import org.springframework.security.web.header.writers.frameoptions.XFrameOption
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
-    private final MemberSecurityService memberSecurityService;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 //                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
@@ -58,17 +56,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-//        return authenticationConfiguration.getAuthenticationManager();
-//    }
-
-    // 명시적 Provider 빈
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(memberSecurityService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
