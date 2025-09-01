@@ -3,7 +3,6 @@ package com.back.global.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,12 +22,12 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-//                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/", "/login", "/signup", "/questions/list").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/questions/detail/**").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/resources/**", "/error", "/favicon.ico").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/h2-console/**").permitAll()
+//                        .requestMatchers("/", "/login", "/signup", "/questions/list").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/questions/detail/**").permitAll()
+//                        .requestMatchers("/css/**", "/js/**", "/resources/**", "/error", "/favicon.ico").permitAll()
+//                        .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**")
