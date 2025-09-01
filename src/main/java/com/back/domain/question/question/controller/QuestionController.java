@@ -74,10 +74,10 @@ public class QuestionController {
 
     @PostMapping("/update/{id}")
     public String questionUpdateSubmit(@RequestParam String subject,
-                                    @RequestParam String content,
-                                    @PathVariable int id) {
+                                       @RequestParam String content,
+                                       @PathVariable int id) {
         questionService.updateById(id, subject, content);
-        return "redirect:/questions/detail/%d".formatted(id);
+        return "redirect:/questions/list";
     }
 
     @GetMapping("/detail/{id}")
