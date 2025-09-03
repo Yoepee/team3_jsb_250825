@@ -35,7 +35,7 @@ public class QuestionRepositoryTest {
     @Test
     @DisplayName("단일 질문 조회")
     void t2() {
-        Optional<Question> opQuestion = questionRepository.findById(1);
+        Optional<Question> opQuestion = questionRepository.findById(1L);
         Question question = opQuestion.get();
         assertThat(question.getSubject()).isEqualTo("주제 1");
         assertThat(question.getContent()).isEqualTo("내용 1");

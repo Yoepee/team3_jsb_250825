@@ -1,6 +1,5 @@
 package com.back.domain.question.question.service;
 
-import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.repository.MemberRepository;
 import com.back.domain.question.question.entity.Question;
@@ -39,28 +38,20 @@ public class QuestionService {
         return questionRepository.count();
     }
 
-    public Question findById(int id) {
+    public Question findById(long id) {
         return questionRepository.findById(id).stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
 
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         questionRepository.deleteById(id);
     }
 
-    public Question updateById(int id, String subject, String content) {
+    public Question updateById(long id, String subject, String content) {
         Question updatedQuestion = findById(id);
         updatedQuestion.setSubject(subject);
         updatedQuestion.setContent(content);
         questionRepository.save(updatedQuestion);
         return updatedQuestion;
-    }
-
-    public List<Answer> findAllAnswersByQuestionId(int questionId) {
-        return findById(questionId).getAnswerList();
-    }
-
-    public List<Question> findQuestionsBySubject(String subject) {
-        return questionRepository.findBySubjectContaining(subject);
     }
 
     public Question write(Member member, String subject, String content) {
@@ -69,12 +60,9 @@ public class QuestionService {
     }
 
     public List<Question> search(String kwType, String kw) {
-        if ("subject".equals(kwType)) {
-            return questionRepository.findBySubjectContaining(kw);
-        } else if ("content".equals(kwType)) {
-            return questionRepository.findByContentContaining(kw);
-        } else {
-            return questionRepository.findBySubjectContainingOrContentContaining(kw, kw);
-        }
+        if ("subject".equals(kwType)) return questionRepository.findBySubjectContaining(kw);
+        if ("content".equals(kwType)) return questionRepository.findByContentContaining(kw);
+
+        return questionRepository.findBySubjectContainingOrContentContaining(kw, kw);
     }
 }

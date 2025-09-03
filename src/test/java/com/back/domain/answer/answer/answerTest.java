@@ -2,13 +2,9 @@ package com.back.domain.answer.answer;
 
 import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.answer.answer.repository.AnswerRepository;
-import com.back.domain.answer.answer.service.AnswerService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,13 +31,13 @@ public class answerTest {
 
     @Test
     void zeriTestV2() {
-        Answer answer = answerRepository.findById(2).orElseThrow();
+        Answer answer = answerRepository.findById(2L).orElseThrow();
         String oldContent = answer.getContent();
 
         answer.setContent("수정된 답변 내용2");
         answerRepository.save(answer);
 
-        Answer updated = answerRepository.findById(2).orElseThrow();
+        Answer updated = answerRepository.findById(2L).orElseThrow();
         assertThat(updated.getContent()).isEqualTo("수정된 답변 내용2");
         assertThat(updated.getContent()).isNotEqualTo(oldContent);
     }

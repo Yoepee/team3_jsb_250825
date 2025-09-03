@@ -22,12 +22,8 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/**").permitAll()
-//                        .requestMatchers("/h2-console/**").permitAll()
-//                        .requestMatchers("/", "/login", "/signup", "/questions/list").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/questions/detail/**").permitAll()
-//                        .requestMatchers("/css/**", "/js/**", "/resources/**", "/error", "/favicon.ico").permitAll()
-//                        .anyRequest().authenticated()
+                        .requestMatchers("/**")
+                        .permitAll()
                 )
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**")
@@ -38,7 +34,7 @@ public class SecurityConfig {
                 )
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", false)
+                        .defaultSuccessUrl("/questions/list")
                         .failureHandler(customAuthenticationFailureHandler)
                 )
                 .logout(logout -> logout
