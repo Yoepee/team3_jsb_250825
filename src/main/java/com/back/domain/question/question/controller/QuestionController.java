@@ -5,6 +5,10 @@ import com.back.domain.question.question.model.QuestionForm;
 import com.back.domain.question.question.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -12,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequestMapping("/questions")
 @Controller
@@ -47,16 +49,13 @@ public class QuestionController {
     @Transactional(readOnly = true)
     @GetMapping("/list")
     public String showList(Model model,
-                           @RequestParam(required = false) String kwType,
-                           @RequestParam(required = false) String kw
+                           @RequestParam(value = "kw", required = false) String kw,
+                           @RequestParam(value = "page", defaultValue = "0") int page,
+                           @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.ASC) Pageable pageable
     ) {
-        List<Question> questions;
-        if (kwType != null && kw != null && !kw.isEmpty()) {
-            questions = questionService.search(kwType, kw);
-        } else {
-            questions = questionService.findAll();
-        }
-        model.addAttribute("questions", questions);
+        Page<Question> questions = questionService.getList(kw, pageable);
+        model.addAttribute("paging", questions);
+        model.addAttribute("kw", kw);
         return "question/question/list";
     }
 

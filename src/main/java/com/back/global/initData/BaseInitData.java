@@ -24,6 +24,7 @@ public class BaseInitData {
             work2();
             work3();
             work4();
+            work5();
         };
     }
 
@@ -56,5 +57,14 @@ public class BaseInitData {
         questionService.write("임의 제목1", "임의 내용1");
         questionService.write("임의 제목2", "임의 내용2");
         System.out.println("임의 데이터 저장 완료");
+    }
+
+    private void work5() {
+        for (int i = 1; i <= 200; i++) {
+            String subject = String.format("테스트 데이터입니다:[%03d]", i);
+            String content = "내용무";
+            String author = "user1";
+            this.questionService.create(subject, content, author);
+        }
     }
 }

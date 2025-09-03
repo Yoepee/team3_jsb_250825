@@ -7,6 +7,8 @@ import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,5 +87,13 @@ public class QuestionService {
                 () -> new EntityNotFoundException("게시물이 존재하지 않습니다"));
         question.increaseViewCount();
         return question;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Question> getList(String kw, Pageable pageable) {
+        if (kw == null || kw.isBlank() || "null".equals(kw)) {
+            return questionRepository.findAll(pageable);
+        }
+        return questionRepository.findBySubjectContainingOrContent(pageable, kw, kw);
     }
 }
