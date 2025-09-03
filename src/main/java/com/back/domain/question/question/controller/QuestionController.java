@@ -5,6 +5,10 @@ import com.back.domain.question.question.model.QuestionForm;
 import com.back.domain.question.question.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -86,5 +90,22 @@ public class QuestionController {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
         return "question/question/detail";
+    }
+
+    @GetMapping("/page")
+    public String showPage(Model model,
+                           @RequestParam(required = false) String kwType,
+                           @RequestParam(required = false) String kw,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "5") int size, Pageable pageable) {
+        Pageable questionsPageable = PageRequest.of(page, size, Sort.by(kwType).descending());
+        Page<Question> questions;
+        if (kwType != null && kw != null && !kw.isEmpty()) {
+            questions = questionService.search(kwType, kw, pageable);
+        } else {
+            questions = questionService.findAll(questionsPageable);
+        }
+        model.addAttribute("questions", questions);
+        return "question/question/list";
     }
 }

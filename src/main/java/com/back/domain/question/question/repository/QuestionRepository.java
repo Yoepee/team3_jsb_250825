@@ -1,6 +1,8 @@
 package com.back.domain.question.question.repository;
 
 import com.back.domain.question.question.entity.Question;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     List<Question> findBySubjectContainingOrContentContaining(String subject, String content);
 
     Question findFirstByOrderByIdDesc();
+    Page<Question> findBySubjectContainingOrderByIdDesc(String subject, Pageable pageable);
+    Page<Question> findByContentContainingOrderByIdDesc(String content, Pageable pageable);
+    Page<Question> findBySubjectContainingOrContentContainingOrderByIdDesc(String subject, String content, Pageable pageable);
 }
