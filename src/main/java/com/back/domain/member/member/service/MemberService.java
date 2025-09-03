@@ -18,32 +18,17 @@ public class MemberService {
         memberRepository.save(member);
     }
 
-    public boolean signin(String username, String password) {
-        Member findMember = memberExist(username);
-        if (findMember == null) return false;
-        else return passwordEncoder.matches(password, findMember.getPassword());
-    }
-
     public void save(String username, String password, String nickname) {
         String encodePassword = passwordEncoder.encode(password);
         Member newMember = new Member(username, encodePassword, nickname);
         memberRepository.save(newMember);
     }
 
-    public Member memberExist(String username) {
-        return memberRepository.findByUsername(username).orElse(null);
-    }
-
     public long count() {
         return memberRepository.count();
     }
-  
-  public Member findById(int i) {
-        return memberRepository.findById(i).orElseThrow(() -> new RuntimeException("Member not found"));
-  }
-  
-  public Member save(Member member) {
-        member.encodePassword(passwordEncoder);
-        return memberRepository.save(member);
-  }
+
+    public Member findById(long id) {
+        return memberRepository.findById(id).orElseThrow(() -> new RuntimeException("Member not found"));
+    }
 }

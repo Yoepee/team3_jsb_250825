@@ -11,6 +11,9 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.PERSIST;
+import static jakarta.persistence.CascadeType.REMOVE;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -18,12 +21,11 @@ public class Question extends BaseEntity {
     @Setter
     private String subject;
     @Setter
-     @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
-    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "question", cascade = {PERSIST, REMOVE})
     private List<Answer> answerList = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", nullable = true)
     private Member author;
 
     public Question(String subject, String content) {

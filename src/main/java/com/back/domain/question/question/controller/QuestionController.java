@@ -23,7 +23,7 @@ public class QuestionController {
 
     @GetMapping("/create")
     public String showCreate(@ModelAttribute("form") QuestionForm form) {
-        return "question/question/question_form";
+        return "question/question/write";
     }
 
     @PostMapping("/create")
@@ -32,7 +32,7 @@ public class QuestionController {
                          BindingResult bindingResult,
                          @AuthenticationPrincipal UserDetails currentUser) {
         if (bindingResult.hasErrors()) {
-            return "question/question/question_form";
+            return "question/question/write";
         }
 
         if (currentUser == null) {
@@ -61,19 +61,19 @@ public class QuestionController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deleteQuestion(@PathVariable int id) {
+    public String delete(@PathVariable int id) {
         questionService.deleteById(id);
         return "redirect:/questions/list";
     }
 
     @GetMapping("/update/{id}")
-    public String questionUpdate(@PathVariable int id, Model model) {
+    public String showUpdate(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findById(id));
-        return "question/questionUpdate";
+        return "question/question/update";
     }
 
     @PostMapping("/update/{id}")
-    public String questionUpdateSubmit(@RequestParam String subject,
+    public String update(@RequestParam String subject,
                                        @RequestParam String content,
                                        @PathVariable int id) {
         questionService.updateById(id, subject, content);

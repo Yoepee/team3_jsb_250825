@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface QuestionRepository extends JpaRepository<Question, Integer> {
+public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Question> findBySubjectContaining(String subject);
     List<Question> findByContentContaining(String content);
-    List<Question> findBySubjectOrContentContaining(String subject, String content);
     List<Question> findBySubjectContainingOrContentContaining(String subject, String content);
 
     Question findFirstByOrderByIdDesc();

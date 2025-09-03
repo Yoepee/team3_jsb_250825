@@ -24,12 +24,12 @@ public class MemberController {
             session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
         }
 
-        return "member/member/login_form";
+        return "member/member/login";
     }
 
     @GetMapping("/signup")
     public String signup() {
-        return "signup";
+        return "member/member/signup";
     }
 
     @PostMapping("/signup")
@@ -40,7 +40,7 @@ public class MemberController {
             memberService.create(username, password, nickname);
             return "redirect:/login";
         } catch (Exception e) {
-            return "signup";
+            return "member/member/signup";
         }
     }
 }
