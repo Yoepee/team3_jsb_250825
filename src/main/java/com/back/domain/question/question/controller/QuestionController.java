@@ -32,7 +32,7 @@ public class QuestionController {
             Model model
     ) {
         List<Question> questions;
-        if (search.getKw().equals("all") && !search.getKwType().isEmpty()) {
+        if (search.getKw().equals("all") && search.getKwType().isEmpty()) {
             questions = questionService.findAll();
         } else {
             questions = questionService.search(search.getKwType(), search.getKw());
