@@ -27,13 +27,8 @@ public class Question extends BaseEntity {
     private List<Answer> answerList = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Member author;
-
-    public Question(String subject, String content) {
-        this.subject = subject;
-        this.content = content;
-    }
   
-    public Question(Member author, String subject, String content) {
+    public Question(String subject, String content, Member author) {
         this.author = author;
         this.subject = subject;
         this.content = content;

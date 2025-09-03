@@ -1,18 +1,21 @@
 package com.back.domain.question.question.controller;
 
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.service.MemberService;
+import com.back.domain.question.question.dto.QuestionDto;
+import com.back.domain.question.question.dto.QuestionSearchDto;
 import com.back.domain.question.question.entity.Question;
-import com.back.domain.question.question.model.QuestionForm;
 import com.back.domain.question.question.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("/questions")
@@ -20,64 +23,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionController {
     private final QuestionService questionService;
-
-    @GetMapping("/create")
-    public String showCreate(@ModelAttribute("form") QuestionForm form) {
-        return "question/question/write";
-    }
-
-    @PostMapping("/create")
-    @Transactional
-    public String create(@ModelAttribute("form") @Valid QuestionForm form,
-                         BindingResult bindingResult,
-                         @AuthenticationPrincipal UserDetails currentUser) {
-        if (bindingResult.hasErrors()) {
-            return "question/question/write";
-        }
-
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
-
-        Question question = questionService.create(form.getSubject(), form.getContent(), currentUser.getUsername());
-
-        return "redirect:/questions/detail/%d".formatted(question.getId());
-    }
+    private final MemberService memberService;
 
     @Transactional(readOnly = true)
     @GetMapping("/list")
-    public String showList(Model model,
-                           @RequestParam(required = false) String kwType,
-                           @RequestParam(required = false) String kw
+    public String showList(
+            @ModelAttribute("search") QuestionSearchDto search,
+            Model model
     ) {
         List<Question> questions;
-        if (kwType != null && kw != null && !kw.isEmpty()) {
-            questions = questionService.search(kwType, kw);
-        } else {
+        if (search.getKw().equals("all") && !search.getKwType().isEmpty()) {
             questions = questionService.findAll();
+        } else {
+            questions = questionService.search(search.getKwType(), search.getKw());
         }
         model.addAttribute("questions", questions);
         return "question/question/list";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String delete(@PathVariable int id) {
-        questionService.deleteById(id);
-        return "redirect:/questions/list";
-    }
-
-    @GetMapping("/update/{id}")
-    public String showUpdate(@PathVariable int id, Model model) {
-        model.addAttribute("question", questionService.findById(id));
-        return "question/question/update";
-    }
-
-    @PostMapping("/update/{id}")
-    public String update(@RequestParam String subject,
-                                       @RequestParam String content,
-                                       @PathVariable int id) {
-        questionService.updateById(id, subject, content);
-        return "redirect:/questions/list";
     }
 
     @GetMapping("/detail/{id}")
@@ -86,5 +47,80 @@ public class QuestionController {
         Question question = questionService.findById(id);
         model.addAttribute("question", question);
         return "question/question/detail";
+    }
+
+    @GetMapping("/create")
+    public String showCreate(@ModelAttribute("form") QuestionDto form) {
+        return "question/question/write";
+    }
+
+    @PostMapping("/create")
+    @Transactional
+    @PreAuthorize("isAuthenticated()")
+    public String create(
+            @ModelAttribute("form") @Valid QuestionDto form,
+            BindingResult bindingResult,
+            Principal principal
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "question/question/write";
+        }
+        Member member = memberService.findByUsername(principal.getName());
+        Question question = questionService.create(form.getSubject(), form.getContent(), member);
+
+        return "redirect:/questions/detail/%d".formatted(question.getId());
+    }
+
+    @GetMapping("/update/{id}")
+    public String showUpdate(
+            @PathVariable int id,
+            @ModelAttribute("form") QuestionDto form,
+            Principal principal,
+            Model model
+    ) {
+        Question question = questionService.findById(id);
+        String username = principal.getName();
+        if (!question.getAuthor().getUsername().equals(username)) {
+            throw new RuntimeException("수정 권한이 없습니다");
+        }
+        form.setSubject(question.getSubject());
+        form.setContent(question.getContent());
+        model.addAttribute("question", question);
+        return "question/question/update";
+    }
+
+    @PostMapping("/update/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String update(
+            @PathVariable int id,
+            @ModelAttribute("form") @Valid QuestionDto form,
+            BindingResult bindingResult,
+            Principal principal
+    ) {
+        if(bindingResult.hasErrors()){
+            return "question/question/update";
+        }
+        Question question = questionService.findById(id);
+        String username = principal.getName();
+        if (!question.getAuthor().getUsername().equals(username)) {
+            throw new RuntimeException("수정 권한이 없습니다");
+        }
+        questionService.update(question, form.getSubject(), form.getContent());
+
+        return "redirect:/questions/detail/%d".formatted(question.getId());
+    }
+
+    @PostMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(
+            @PathVariable int id,
+            Principal principal
+    ) {
+        Question question = questionService.findById(id);
+        if (!question.getAuthor().getUsername().equals(principal.getName())) {
+            throw new RuntimeException("삭제 권한이 없습니다");
+        }
+        questionService.delete(question);
+        return "redirect:/questions/list";
     }
 }

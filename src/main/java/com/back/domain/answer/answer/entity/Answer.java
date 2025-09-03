@@ -22,12 +22,7 @@ public class Answer extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member author;
   
-    public Answer(String content, Question question) {
-        this.content = content;
-        this.question = question;
-    }
-  
-    public Answer(Member author, Question question, String content){
+    public Answer(String content, Question question, Member author){
         this.author = author;
         this.question = question;
         this.content = content;

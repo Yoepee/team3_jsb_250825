@@ -10,7 +10,11 @@
         </div>
         <div class="flex items-center gap-2">
             <!-- 수정: GET 이동 -->
-            <form id="updateForm" th:action="@{/questions/update/{questionId}(questionId=${question.id})}">
+            <form id="updateForm"
+                  th:action="@{/questions/update/{questionId}(questionId=${question.id})}"
+                  sec:authorize="isAuthenticated()"
+                  th:if="${question.author != null and #authentication.name == question.author.username}"
+            >
                 <button
                         type="submit"
                         class="rounded-xl border px-4 py-2 text-gray-700 hover:bg-gray-50"
@@ -19,11 +23,12 @@
                 </button>
             </form>
             <!-- 삭제: POST + 확인 -->
-            <form
-                    id="deleteQues"
-                    th:action="@{/questions/delete/{questionId}(questionId=${question.id})}"
-                    method="post"
-                    onsubmit="return confirm('정말 삭제하시겠어요?');"
+            <form id="deleteQues"
+                  sec:authorize="isAuthenticated()"
+                  th:if="${question.author != null and #authentication.name == question.author.username}"
+                  th:action="@{/questions/delete/{questionId}(questionId=${question.id})}"
+                  method="post"
+                  onsubmit="return confirm('정말 삭제하시겠어요?');"
             >
                 <button
                         type="submit"
@@ -43,7 +48,8 @@
         <span class="font-medium text-gray-700" th:text="${question?.author?.nickname ?: '익명'}">익명</span>
       </span>
             <span class="hidden sm:inline">•</span>
-            <time th:text="${#temporals.format(question?.createdDate, 'yyyy.MM.dd HH:mm:ss')}">2025.01.01 12:34:56</time>
+            <time th:text="${#temporals.format(question?.createdDate, 'yyyy.MM.dd HH:mm:ss')}">2025.01.01 12:34:56
+            </time>
         </div>
 
         <div class="text-gray-800 leading-7 whitespace-pre-wrap" th:text="${question?.content}">
@@ -61,7 +67,8 @@
 
     <!-- 목록으로 -->
     <div class="mt-8">
-        <a th:href="@{/questions/list}" class="inline-flex items-center rounded-xl border px-4 py-2 text-gray-700 hover:bg-gray-50">
+        <a th:href="@{/questions/list}"
+           class="inline-flex items-center rounded-xl border px-4 py-2 text-gray-700 hover:bg-gray-50">
             목록으로
         </a>
     </div>
