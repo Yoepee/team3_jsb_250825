@@ -52,7 +52,7 @@ public class AnswerRepositoryTest {
 
         Member member = memberService.findById(1);
         Question question = questionService.findById(1);
-        Answer answer = new Answer(member, question, "답변 3");
+        Answer answer = new Answer("답변 3", question, member);
         answerRepository.save(answer);
         assertThat(answer.getId()).isGreaterThan(0);
         assertThat(answer.getContent()).isEqualTo("답변 3");

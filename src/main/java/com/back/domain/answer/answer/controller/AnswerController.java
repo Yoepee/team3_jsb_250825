@@ -1,15 +1,20 @@
 package com.back.domain.answer.answer.controller;
 
+import com.back.domain.answer.answer.dto.AnswerCreateDto;
+import com.back.domain.answer.answer.dto.AnswerUpdateDto;
 import com.back.domain.answer.answer.entity.Answer;
 import com.back.domain.answer.answer.service.AnswerService;
+import com.back.domain.member.member.entity.Member;
+import com.back.domain.member.member.service.MemberService;
+import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -17,31 +22,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AnswerController {
     private final AnswerService answerService;
     private final QuestionService questionService;
+    private final MemberService memberService;
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String create(
-                        @RequestParam Long questionId,
-                        @RequestParam String content
+            @ModelAttribute("form") AnswerCreateDto form,
+            BindingResult bindingResult,
+            Principal principal
     ) {
-        Answer answer = answerService.write(content, questionService.findById(questionId));
+        if (bindingResult.hasErrors()) {
+            return "redirect:/questions/detail/%d".formatted(form.questionId());
+        }
+        Member member = memberService.findByUsername(principal.getName());
+        Question question = questionService.findById(form.questionId());
+        Answer answer = answerService.write(form.content(), question, member);
         return "redirect:/questions/detail/%d".formatted(answer.getQuestion().getId());
     }
 
     @PostMapping("/update/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String update(@PathVariable Long id, @RequestParam String content) {
-        Answer answer = answerService.modify(id, content);
-        return "redirect:/questions/detail/%d".formatted(answer.getQuestion().getId());
+    public String update(
+            @PathVariable Long id,
+            @ModelAttribute("form") AnswerUpdateDto form,
+            BindingResult bindingResult,
+            Principal principal
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/questions/detail/%d".formatted(form.questionId());
+        }
+        Answer answer = answerService.findById(id);
+        if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+            throw new RuntimeException("수정 권한이 없습니다");
+        }
+        answerService.modify(answer, form.content());
+        return "redirect:/questions/detail/%d".formatted(form.questionId());
     }
 
-   @PostMapping("/delete/{id}")
-   @PreAuthorize("isAuthenticated()")
+    @PostMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
     public String delete(
             @PathVariable Long id,
-            @RequestParam Long questionId
+            Principal principal
     ) {
-        answerService.delete(id);
+        Answer answer = answerService.findById(id);
+        if (!answer.getAuthor().getUsername().equals(principal.getName())) {
+            throw new RuntimeException("삭제 권한이 없습니다");
+        }
+        long questionId = answer.getQuestion().getId();
+        answerService.delete(answer);
         return "redirect:/questions/detail/%d".formatted(questionId);
     }
 }

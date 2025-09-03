@@ -16,22 +16,13 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
 
-    public Question create(String subject, String content, String username) {
-        Member author = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다."));
-
-        Question question = new Question(author, subject, content);
+    public Question create(String subject, String content, Member author) {
+        Question question = new Question(subject, content, author);
         return questionRepository.save(question);
     }
 
     public List<Question> findAll() {
         return questionRepository.findAll();
-    }
-
-    public Question write(String subject, String content) {
-        Question question = new Question(subject, content);
-        questionRepository.save(question);
-        return question;
     }
 
     public long count() {
@@ -42,20 +33,18 @@ public class QuestionService {
         return questionRepository.findById(id).stream().findFirst().orElseThrow(() -> new EntityNotFoundException("Question not found"));
     }
 
-    public void deleteById(long id) {
-        questionRepository.deleteById(id);
+    public void delete(Question question) {
+        questionRepository.delete(question);
     }
 
-    public Question updateById(long id, String subject, String content) {
-        Question updatedQuestion = findById(id);
-        updatedQuestion.setSubject(subject);
-        updatedQuestion.setContent(content);
-        questionRepository.save(updatedQuestion);
-        return updatedQuestion;
+    public Question update(Question question, String subject, String content) {
+        question.setSubject(subject);
+        question.setContent(content);
+        return questionRepository.save(question);
     }
 
-    public Question write(Member member, String subject, String content) {
-        Question question = new Question(member, subject, content);
+    public Question write(String subject, String content, Member member) {
+        Question question = new Question(subject, content, member);
         return questionRepository.save(question);
     }
 

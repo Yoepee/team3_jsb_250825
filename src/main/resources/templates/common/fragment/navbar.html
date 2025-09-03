@@ -19,7 +19,7 @@
 
             <!-- 로그인 후 -->
             <span sec:authorize="isAuthenticated()" class="hidden sm:inline text-sm text-gray-600">
-        안녕하세요, <strong sec:authentication="name" class="text-gray-800 font-medium">user</strong>님
+        안녕하세요, <span sec:authentication="name" class="text-gray-800 font-medium"></span>님
       </span>
             <form id="logoutForm" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" class="m-0">
                 <button type="submit"

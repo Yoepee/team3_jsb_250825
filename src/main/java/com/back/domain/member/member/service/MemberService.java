@@ -31,4 +31,12 @@ public class MemberService {
     public Member findById(long id) {
         return memberRepository.findById(id).orElseThrow(() -> new RuntimeException("Member not found"));
     }
+
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Member not found"));
+    }
+
+    public boolean hasMemberByUsername(String username) {
+        return memberRepository.findByUsername(username).isPresent();
+    }
 }

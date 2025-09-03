@@ -1,0 +1,3 @@
+<ul th:fragment="errorsFragment" th:if="${#fields.hasAnyErrors()}" class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <li th:each="err : ${#fields.allErrors()}" th:text="${err}" style="color:red;"></li>
+</ul>
