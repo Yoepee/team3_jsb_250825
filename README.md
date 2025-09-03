@@ -5,7 +5,7 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 
 ---
 
-## 🔧 Tech Stack
+## 🔧 기술 스택택
 
 - **Language/Build**: Java 21, Gradle
 - **Framework**: Spring Boot
@@ -58,7 +58,8 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 - **Question 1 : N Answer** (질문 삭제 시 답변도 삭제: `cascade=REMOVE`)
 
 ---
-## Question Routes
+## 🔗 주요 URL (SSR)
+### Question Routes
 | Method | Path                       | Method 이름     | Note |
 |-------:|----------------------------|-----------------|------|
 | GET    | /questions/list            | showList        | 목록/검색(kwType, kw) |
@@ -69,14 +70,14 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 | POST   | /questions/update/{id}     | update          | 🔒 로그인 필요, 본인만 수정 |
 | POST   | /questions/delete/{id}     | delete          | 🔒 로그인 필요, 본인만 삭제 |
 
-## Answer Routes
+### Answer Routes
 | Method | Path                      | Method 이름 | Note |
 |-------:|---------------------------|-------------|------|
 | POST   | /answers/create           | create      | 🔒 로그인 필요, 등록 후 질문 상세로 리다이렉트 |
 | POST   | /answers/update/{id}      | update      | 🔒 로그인 필요, 본인만 수정 |
 | POST   | /answers/delete/{id}      | delete      | 🔒 로그인 필요, 본인만 삭제 |
 
-## Member (Auth) Routes
+### Member (Auth) Routes
 | Method | Path    | Method 이름  | Note |
 |-------:|---------|--------------|------|
 | GET    | /login  | showLogin    | 로그인 폼, 실패 메시지 표시(WebAttributes) |
