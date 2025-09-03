@@ -15,25 +15,31 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Question extends BaseEntity {
+    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private final List<Answer> answerList = new ArrayList<>();
     @Setter
     private String subject;
     @Setter
-     @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String content;
-    @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<Answer> answerList = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = true)
     private Member author;
+    @Setter
+    private int viewCount = 0;
 
     public Question(String subject, String content) {
         this.subject = subject;
         this.content = content;
     }
-  
+
     public Question(Member author, String subject, String content) {
         this.author = author;
         this.subject = subject;
         this.content = content;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
     }
 }

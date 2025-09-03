@@ -8,6 +8,7 @@ import com.back.domain.question.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -76,5 +77,13 @@ public class QuestionService {
         } else {
             return questionRepository.findBySubjectContainingOrContentContaining(kw, kw);
         }
+    }
+
+    @Transactional
+    public Question incrementViewCount(int id) {
+        Question question = questionRepository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("게시물이 존재하지 않습니다"));
+        question.increaseViewCount();
+        return question;
     }
 }

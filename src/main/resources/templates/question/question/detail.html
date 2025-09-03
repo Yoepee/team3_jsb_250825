@@ -1,5 +1,5 @@
 <html layout:decorate="~{layout}">
-<div layout:fragment="content" class="mx-auto max-w-3xl px-4 my-10">
+<div class="mx-auto max-w-3xl px-4 my-10" layout:fragment="content">
     <!-- 상단 액션 -->
     <div class="flex items-center justify-between mb-4">
         <div class="flex items-center gap-3">
@@ -12,8 +12,8 @@
             <!-- 수정: GET 이동 -->
             <form id="updateForm" th:action="@{/questions/update/{questionId}(questionId=${question.id})}">
                 <button
-                        type="submit"
                         class="rounded-xl border px-4 py-2 text-gray-700 hover:bg-gray-50"
+                        type="submit"
                 >
                     질문 수정
                 </button>
@@ -21,13 +21,13 @@
             <!-- 삭제: POST + 확인 -->
             <form
                     id="deleteQues"
-                    th:action="@{/questions/delete/{questionId}(questionId=${question.id})}"
                     method="post"
                     onsubmit="return confirm('정말 삭제하시겠어요?');"
+                    th:action="@{/questions/delete/{questionId}(questionId=${question.id})}"
             >
                 <button
-                        type="submit"
                         class="rounded-xl bg-red-600 px-4 py-2 text-white font-medium shadow-sm transition hover:bg-red-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                        type="submit"
                 >
                     질문 삭제
                 </button>
@@ -43,8 +43,13 @@
         <span class="font-medium text-gray-700" th:text="${question?.author?.nickname ?: '익명'}">익명</span>
       </span>
             <span class="hidden sm:inline">•</span>
-            <time th:text="${#temporals.format(question?.createdDate, 'yyyy.MM.dd HH:mm:ss')}">2025.01.01 12:34:56</time>
+            <time th:text="${#temporals.format(question?.createdDate, 'yyyy.MM.dd HH:mm:ss')}">2025.01.01 12:34:56
+            </time>
+            <!--            조회수-->
+            <span class="hidden sm:inline">•</span>
+            <span>조회수: <span th:text="${question?.viewCount}">0</span></span>
         </div>
+
 
         <div class="text-gray-800 leading-7 whitespace-pre-wrap" th:text="${question?.content}">
             내용
@@ -61,7 +66,8 @@
 
     <!-- 목록으로 -->
     <div class="mt-8">
-        <a th:href="@{/questions/list}" class="inline-flex items-center rounded-xl border px-4 py-2 text-gray-700 hover:bg-gray-50">
+        <a class="inline-flex items-center rounded-xl border px-4 py-2 text-gray-700 hover:bg-gray-50"
+           th:href="@{/questions/list}">
             목록으로
         </a>
     </div>

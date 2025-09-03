@@ -81,10 +81,10 @@ public class QuestionController {
     }
 
     @GetMapping("/detail/{id}")
-    @Transactional(readOnly = true)
     public String showDetail(@PathVariable int id, Model model) {
-        Question question = questionService.findById(id);
+        Question question = questionService.incrementViewCount(id);
         model.addAttribute("question", question);
+
         return "question/question/detail";
     }
 }
