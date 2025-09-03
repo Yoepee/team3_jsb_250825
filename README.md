@@ -5,7 +5,7 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 
 ---
 
-## 🔧 기술 스택택
+## 🔧 기술 스택
 
 - **Language/Build**: Java 21, Gradle
 - **Framework**: Spring Boot
@@ -106,12 +106,41 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 - **공통 구현**: 스프린트 초반, 각자 모든 기본 기능을 독립 구현 → 코드 리뷰/리팩토링으로 컨벤션 통합
 - **협업 흐름**: GitHub Flow(브랜치 → PR → 리뷰 → 머지), 공통 코드스타일/URL 규칙 준수
 
+### 🚀 추가 기능 (각자 구현)
+> 스프린트 확장 과제: 아래 4개 항목을 **팀원 전원이 각각 독립 구현**해보기로 했습니다.  
+- 답변 페이징 & 정렬
+- 댓글
+- 조회수
+- 카테고리 분류
+
 ---
 ## 🛠 트러블슈팅
 ---
 ## 😵 어려웠던 점 & 해결
 ---
 ## 🧩 화면
+### Question (로그인 전)
+| 목록 | 상세 |
+|---|---|
+| <img width="1065" height="832" alt="image" src="https://github.com/user-attachments/assets/4cdc40de-2277-4f73-94c3-ff5700f5fd9b" /> | <img width="1072" height="818" alt="image" src="https://github.com/user-attachments/assets/f87b5b84-e755-4fa0-98b4-49ec1ef0ba1e" /> |
+
+### Question (로그인 후)
+| 목록 | 상세 | 작성 | 수정 |
+|---|---|---|---|
+| <img width="1061" height="864" alt="image" src="https://github.com/user-attachments/assets/66dad328-234d-40a8-abd6-e35d89351bf9" /> | <img width="1055" height="1119" alt="image" src="https://github.com/user-attachments/assets/f7fffe6e-0d39-4507-a1fa-937f4dbb8382" /> | <img width="1064" height="813" alt="image" src="https://github.com/user-attachments/assets/b1cb6cbb-e426-4c66-bc67-23516cb01066" /> | <img width="1068" height="752" alt="image" src="https://github.com/user-attachments/assets/dbf7e4ca-a622-4db0-99bf-80f27db66cf6" /> |
+
+### Answer
+| 목록 & 등록 | 수정 |
+|---|---|
+| <img width="770" height="765" alt="image" src="https://github.com/user-attachments/assets/c5bb4e3d-c302-40c7-bc1a-65a21b6e3562" /> | <img width="724" height="437" alt="image" src="https://github.com/user-attachments/assets/bdded3a9-bef4-4c8f-8a67-eeb8cead3aa5" /> |
+
+
+
+### Auth & Search
+| 로그인 | 회원가입 |
+|---|---|
+| <img width="1074" height="1015" alt="image" src="https://github.com/user-attachments/assets/6478b80e-1c9f-46d0-b7ac-5f35b3b358b3" /> | <img width="1072" height="884" alt="image" src="https://github.com/user-attachments/assets/698c552e-c223-49ca-b17e-0c24a2ba1d5f" /> |
+
 ---
 ## 🌿 브랜치/커밋 컨벤션
 - 브랜치: feature/<scope>, fix/<scope>, chore/<scope>
