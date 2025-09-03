@@ -106,6 +106,8 @@ public class QuestionController {
             questions = questionService.findAll(questionsPageable);
         }
         model.addAttribute("questions", questions);
+        model.addAttribute("kwType", kwType);
+        model.addAttribute("kw", kw);
         return "question/question/list";
     }
 }
