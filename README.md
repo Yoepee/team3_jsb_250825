@@ -142,6 +142,37 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 | <img width="1074" height="1015" alt="image" src="https://github.com/user-attachments/assets/6478b80e-1c9f-46d0-b7ac-5f35b3b358b3" /> | <img width="1072" height="884" alt="image" src="https://github.com/user-attachments/assets/698c552e-c223-49ca-b17e-0c24a2ba1d5f" /> |
 
 ---
+## 🧪 E2E 테스트 시나리오 (Manual)
+
+> 브라우저 수동 테스트 흐름입니다.  
+> 사전 조건: 클린 DB(H2 메모리), Chrome 최신, CSRF 활성, 기본 계정 없음.
+
+### 기본 플로우
+| # | Action (Path) | 입력/조건 | 기대 결과 |
+|---|---|---|---|
+| 1 | 회원가입 폼 진입 **GET** `/signup` |  | 폼 렌더링 |
+| 2 | 회원가입 제출 **POST** `/signup` | `username`, `password`, `password_confirm`, `nickname` | 검증 통과 시 **`redirect:/login`**. 중복/불일치 시 에러 메시지 표시 |
+| 3 | 로그인 폼/처리 **GET/POST** `/login` | 가입한 계정 | 로그인 성공 후 홈/목록으로 리다이렉트, 헤더에 사용자명 노출 |
+| 4 | 질문 목록 진입 **GET** `/questions/list` |  | 목록/검색폼 렌더링 |
+| 5 | 질문 작성 폼 **GET** `/questions/create` |  | 폼 렌더링 |
+| 6 | 질문 생성 **POST** `/questions/create` | `subject`, `content` | 성공 시 **`redirect:/questions/detail/{id}`** |
+| 7 | 질문 상세 **GET** `/questions/detail/{id}` |  | 제목/본문/답변섹션 표시 |
+| 8 | 질문 수정 폼 **GET** `/questions/update/{id}` | 작성자 로그인 상태 | 폼 렌더링(기존 값 바인딩). 작성자 아님 → 접근 차단/리다이렉트 |
+| 9 | 질문 수정 **POST** `/questions/update/{id}` | 변경된 `subject`, `content` | 성공 시 **상세로 리다이렉트**, 내용 반영 |
+| 10 | 답변 등록 **POST** `/answers/create` | `content`, `questionId` | 성공 시 **상세로 리다이렉트**, 답변 노출 |
+| 11 | 답변 수정 **POST** `/answers/update/{answerId}` | 수정된 `content` | 성공 시 **상세로 리다이렉트**, 수정 반영 |
+| 12 | 답변 삭제 **POST** `/answers/delete/{answerId}` | 작성자 로그인 | 성공 시 **상세로 리다이렉트**, 목록에서 제거 |
+| 13 | 질문 삭제 **POST** `/questions/delete/{id}` | 작성자 로그인 | **`redirect:/questions/list`**, 삭제 확인(상세 접근 시 404/리다이렉트) |
+| 14 | 로그아웃 **POST** `/logout` |  | 세션 종료, 로그인/비로그인 UI 전환 |
+
+### 검증 포인트 (Checklist)
+- [ ] 모든 POST 폼에 **CSRF 토큰** 포함 (Thymeleaf 자동 주입 확인)  
+- [ ] **권한**: 비로그인 사용자는 작성/수정/삭제 불가, 버튼 비노출 + 서버단 검사  
+- [ ] **소유권**: 타 사용자로 로그인 시 타인의 질문/답변 수정·삭제 차단 (컨트롤러/서비스 둘 다)  
+- [ ] **검증 메시지**: 빈 제목/본문 등 유효성 실패 시 `BindingResult`로 폼 재렌더링 & 입력값 유지  
+- [ ] **검색**: 목록에서 검색 후 이동 시 `kwType`, `kw` 유지  
+
+---
 ## 🌿 브랜치/커밋 컨벤션
 - 브랜치: feature/<scope>, fix/<scope>, chore/<scope>
 - 커밋: feat: OOO, fix: OOO, refactor: OOO
