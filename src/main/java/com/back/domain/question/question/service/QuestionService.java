@@ -1,7 +1,6 @@
 package com.back.domain.question.question.service;
 
 import com.back.domain.member.member.entity.Member;
-import com.back.domain.member.member.repository.MemberRepository;
 import com.back.domain.question.question.entity.Question;
 import com.back.domain.question.question.repository.QuestionRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,7 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private final MemberRepository memberRepository;
 
     public Question create(String subject, String content, Member author) {
         Question question = new Question(subject, content, author);
