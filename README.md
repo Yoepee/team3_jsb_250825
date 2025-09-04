@@ -115,6 +115,74 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 
 ---
 ## 🛠 트러블슈팅
+### 1) 엔티티/관계 매핑했는데 데이터가 안 들어감
+- **원인**: 초기 DB 파일(스키마)이 **불완전한 상태**로 생성되어 매핑과 불일치.
+- **해결**:
+  - 로컬 H2/파일 DB 삭제 후 재실행(스키마 재생성).
+  - (권장) DDL 자동설정 확인 `spring.jpa.hibernate.ddl-auto=update|create-drop`
+  - 장기적으로는 **Flyway/Liquibase**로 스키마 버전 관리.
+ 
+### 2) 검색이 동작하지 않음(쿼리스트링 미생성)
+- **원인**: `th:feild` 오타 → `name` 속성이 생성되지 않아 파라미터 미전달.
+- **해결**: `th:field="*{kw}"`로 수정.  
+    렌더된 HTML에 `name="kw"`가 있는지 확인.
+  ```html
+  <form th:action="@{/questions/list}" th:object="${search}" method="get">
+    <input th:field="*{kw}" type="text"/>
+    <select th:field="*{kwType}">
+      <option value="all">전체</option>
+      <option value="subject">제목</option>
+      <option value="content">내용</option>
+    </select>
+  </form>
+  ```
+### 3) 로그인 실패 / 비밀번호 검증 문제 (+ 2중 인코딩)
+- **원인**:
+  - 기존 수동 로그인(평문 비교) 과 Spring Security의 BCrypt matches() 절차 충돌.
+  - @Builder 경로로 엔티티 생성 시 생성자/인코딩 로직을 우회하여 2중 인코딩 발생.
+- **해결**:
+  - 회원가입 시 Service 레이어에서만 인코딩:
+    ```java
+    String enc = passwordEncoder.encode(raw);
+    memberRepository.save(new Member(username, enc, nickname));
+    ```
+
+  - 로그인은 POST /login 으로 Security 인증 절차에 위임(수동 비교/세션 주입 제거).
+
+  - 엔티티에서 불필요한 인코딩 메서드 제거(또는 사용 금지).
+→ “인코딩 책임 = Service”로 단일화.
+
+### 4) H2 콘솔 접근 불가 / 로그인 후 엉뚱한 리다이렉트
+- **원인**: Security가 H2 차단, 로그인 성공 후 기본 리다이렉트로 흐름 꼬임
+- **해결(설정 예)**
+  ```java
+  http
+    .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
+    .authorizeHttpRequests(auth -> auth
+      .requestMatchers("/**")
+      .permitAll()
+    )
+    .formLogin(formLogin -> formLogin
+      .loginPage("/login")
+      .defaultSuccessUrl("/questions/list")
+      .failureHandler(customAuthenticationFailureHandler)
+    )
+    .logout(logout -> logout
+      .logoutUrl("/logout")
+      .logoutSuccessUrl("/")
+      .invalidateHttpSession(true)
+    );
+  ```
+### 5) POST 요청 403 (CSRF)
+- **원인**: CSRF 토큰 미포함 또는 action URL/메서드 불일치.
+- **해결**:
+  - 폼에 정확한 경로 지정: 
+    ```html
+      <form th:action="@{/...}" method="post">
+    ```
+### 6) 로그인 없이 상세 페이지에서 수정/삭제 가능
+- **원인**: `permitAll("/questions/detail/**")`을 모든 HTTP 메서드에 적용 → 상세에서의 수정/삭제 POST도 통과.
+- **해결**: `HttpMethod.GET`으로 제한 걸어서 GET을 제외한 나머지 요청은 인증을 요구하도록 수정
 ---
 ## 😵 어려웠던 점 & 해결
 ---
