@@ -185,6 +185,53 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 - **해결**: `HttpMethod.GET`으로 제한 걸어서 GET을 제외한 나머지 요청은 인증을 요구하도록 수정
 ---
 ## 😵 어려웠던 점 & 해결
+### 1) 기능 단위 병합 후 코드 스타일/구조 제각각 → 가독성 저하, 이해 비용 증가
+- **영향**: 리뷰/수정 속도 저하, 버그 추적 어려움(특히 주니어 입장 난도↑)
+- **원인**: 개발 전 공통 **컨벤션/용어/패키지 구조** 합의 부재, PR 템플릿/자동 포맷터 미도입
+- **해결**:
+  - 병합은 **주 담당자 기준**으로 우선 정리
+  - 이후 **리팩토링 스프린트**로 구조/용어 일원화  
+    - URL: 명사 경로 + HTTP 메서드(폼만 `/new`, `/edit`)  
+    - DTO: `*CreateRequest`, `*UpdateRequest`, `*Response`  
+    - 계층: Controller 얇게, **Service @Transactional**, Repository 단순화
+- **교훈/다음 액션**:
+  - `/docs/conventions.md`에 **규칙 사전 합의**(네이밍, URL, 패키지, 예외/검증)
+  - **PR 템플릿 + 리뷰 체크리스트**(권한, 검증, 로그, 문서 갱신)
+  - **자동 포맷터/린터**(Spotless/Checkstyle) + **pre-commit hook** 적용
+  - **코드 오너십/페어리뷰**로 주니어 온보딩 난도 완화
+
+---
+
+### 2) 한 컨트롤러에서 검색 + 페이지네이션 동시 적용 시 UI/흐름 구현 난이도↑
+- **영향**: 화면에서 **검색 상태 유지**, **페이지 이동 시 파라미터 보존**이 꼬여 개발 시간 증가
+- **원인**: 파라미터 전파 패턴 부재(`kwType`, `kw`, `sort`), 화면/서버 간 용어 불일치
+- **해결 패턴**:
+  - **컨트롤러**
+    ```java
+    @GetMapping("/questions")
+    public String list(@ModelAttribute("search") QuestionSearchDto search,
+                       @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC)
+                       Pageable pageable, Model model) {
+        Page<QuestionResponse> page = questionService.search(search, pageable);
+        model.addAttribute("page", page);
+        return "question/list";
+    }
+    ```
+  - **뷰(Thymeleaf): 파라미터 보존**
+    ```html
+    <a th:href="@{/questions(
+        page=${p},
+        size=${page.size},
+        sort=${param.sort},
+        kwType=${search.kwType},
+        kw=${search.kw}
+    )}">[[${p+1}]]</a>
+    ```
+  - **검색 폼**: `th:object="${search}"` + `th:field="*{kw}"`, `th:field="*{kwType}"`
+- **교훈/다음 액션**:
+  - **공통 페이징/검색 컴포넌트**(Thymeleaf fragment)로 재사용
+  - `QuestionSearchDto`에 **기본값**과 **검증** 부여, 화면·서버 **용어 통일(subject/content/all)**
+  - 링크 생성은 **헬퍼 메서드/유틸**로 캡슐화하여 오타/누락 방지
 ---
 ## 🧩 화면
 ### Question (로그인 전)
@@ -246,6 +293,17 @@ Spring Data JPA로 정렬·페이징을 지원합니다.
 - 커밋: feat: OOO, fix: OOO, refactor: OOO
 ---
 ## 🔭 향후 개선사항
+- [ ] **답변 페이징 & 정렬**  _(Planned)_
+  - DoD: `page,size,sort` 파라미터 동작, 상세 화면에서 답변 목록 페이징 UI 제공
+
+- [ ] **댓글(Comment)**  _(Planned)_
+  - DoD: Answer 하위 댓글 CRUD, 작성자만 수정/삭제, 권한/검증 메시지
+
+- [ ] **조회수(views)**  _(Planned)_
+  - DoD: 상세 진입 시 증가, 동일 세션/짧은 시간 중복 방지, 목록/상세에 노출
+
+- [ ] **카테고리 분류**  _(Planned)_
+  - DoD: 단일/다중 중 1안 선택, 목록 필터링 및 검색 파라미터 유지
 
 
 
