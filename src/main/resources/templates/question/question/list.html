@@ -1,4 +1,4 @@
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html layout:decorate="~{/common/layout/layout}">
 <div layout:fragment="content" class="mx-auto max-w-5xl px-4 my-10">
     <main class="space-y-6">
         <!-- 헤더 -->
@@ -7,27 +7,28 @@
                 <h3 class="text-xl font-semibold">게시글 목록</h3>
                 <p class="mt-1 text-sm text-gray-500" th:text="'총 ' + ${#lists.size(paging)} + '건'">총 0건</p>
             </div>
-            <a
-                    th:href="@{/questions/create}"
-                    class="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-white font-medium shadow-sm transition hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+            <a th:href="@{/questions/create}"
+               sec:authorize="isAuthenticated()"
+               class="inline-flex items-center rounded-xl bg-indigo-600 px-4 py-2 text-white font-medium shadow-sm transition hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
             >
                 글쓰기
             </a>
         </div>
 
         <!-- 검색 폼 -->
-        <form th:action="@{/questions/list}" method="get"
+        <form th:action="@{/questions/list}" th:object="${search}" method="get"
               class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_auto_auto] rounded-2xl border bg-white/80 backdrop-blur p-4">
             <input
-                    name="kw"
+                    th:field="*{kw}"
                     type="text"
                     placeholder="검색어 입력"
                     class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
             />
             <select
-                    name="kwType"
+                    th:field="*{kwType}"
                     class="rounded-xl border border-gray-300 bg-white px-3 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
             >
+                <option value="all">전체</option>
                 <option value="title">제목</option>
                 <option value="content">내용</option>
             </select>

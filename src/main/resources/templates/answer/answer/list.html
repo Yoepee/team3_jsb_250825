@@ -1,16 +1,19 @@
 `
 <div th:fragment="answerList(question)" class="space-y-6">
     <!-- 답변 작성 -->
-    <div class="rounded-2xl border bg-white/80 backdrop-blur p-6">
+    <div class="rounded-2xl border bg-white/80 backdrop-blur p-6"
+         sec:authorize="isAuthenticated()"
+    >
         <h3 class="text-lg font-semibold mb-4">답변 작성</h3>
-        <form th:action="@{/answers/write/{questionId}(questionId=${question.id})}" method="post" class="space-y-3">
-      <textarea
-              name="content"
-              rows="4"
-              placeholder="답변을 입력하세요…"
-              required
-              class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-      ></textarea>
+        <form th:action="@{/answers/create}" method="post" class="space-y-3">
+            <input class="hidden" id="questionId" name="questionId" th:value="${question.id}">
+            <textarea
+                    name="content"
+                    rows="4"
+                    placeholder="답변을 입력하세요…"
+                    required
+                    class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+            ></textarea>
             <div class="flex justify-end">
                 <button
                         type="submit"
@@ -47,26 +50,30 @@
             </div>
 
             <!-- 내용 -->
-            <div class="mt-3 text-gray-800 leading-7 whitespace-pre-wrap" th:text="*{content}">
+            <div class="mt-3 text-gray-800 leading-7 whitespace-pre-wrap break-all" th:text="*{content}">
                 내용
             </div>
 
             <!-- 액션 -->
             <div class="mt-4 flex items-start gap-2">
                 <!-- 수정 (details로 토글) -->
-                <details class="group flex-1 min-w-0">
+                <details class="group flex-1 min-w-0"
+                         sec:authorize="isAuthenticated()"
+                         th:if="${answer.author != null and #authentication.name == answer.author.username}"
+                >
                     <summary
                             class="inline-flex cursor-pointer select-none items-center gap-2 rounded-xl border px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50">
                         수정
                     </summary>
                     <div class="mt-3 rounded-xl border bg-white p-4">
                         <form th:action="@{/answers/update/{answerId}(answerId=*{id})}" method="post" class="space-y-3">
-        <textarea
-                name="content"
-                rows="4"
-                th:text="*{content}"
-                required
-                class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"></textarea>
+                            <textarea name="content"
+                                      rows="4"
+                                      th:text="*{content}"
+                                      required
+                                      class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500">
+
+                            </textarea>
                             <div class="flex items-center justify-end gap-2">
                                 <button type="submit"
                                         class="rounded-xl bg-gray-900 px-4 py-2 text-white text-sm font-medium shadow-sm transition hover:bg-gray-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-900">
@@ -82,11 +89,12 @@
                 </details>
 
                 <!-- 삭제 -->
-                <form
-                        th:action="@{/answers/delete/{answerId}(answerId=*{id})}"
-                        method="post"
-                        onsubmit="return confirm('이 답변을 삭제하시겠어요?');"
-                        class="ml-auto shrink-0">
+                <form th:action="@{/answers/delete/{answerId}(answerId=*{id})}"
+                      sec:authorize="isAuthenticated()"
+                      th:if="${answer.author != null and #authentication.name == answer.author.username}"
+                      method="post"
+                      onsubmit="return confirm('이 답변을 삭제하시겠어요?');"
+                      class="ml-auto shrink-0">
                     <input type="hidden" name="questionId" th:value="${question.id}">
                     <button
                             type="submit"

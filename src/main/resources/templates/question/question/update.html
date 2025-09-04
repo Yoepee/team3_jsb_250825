@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{/common/layout/layout}">
 <div class="mx-auto max-w-2xl px-4 my-10" layout:fragment="content">
     <div class="bg-white/80 backdrop-blur border rounded-2xl shadow-sm p-8">
         <header class="mb-6">
@@ -6,15 +6,14 @@
             <p class="mt-1 text-sm text-gray-500">궁금한 내용을 자세히 적어주세요.</p>
         </header>
 
-        <form class="space-y-5" method="post" th:action="@{'/questions/update/' + ${question.id}}"
-              th:object="${question}">
+        <form class="space-y-5" method="post" th:action="@{/questions/update/{questionId}(questionId=${question.id})}"
+              th:object="${form}">
             <!-- 제목 -->
             <div>
                 <label class="block text-sm font-medium text-gray-700" for="subject">제목</label>
                 <input
                         autofocus
                         class="mt-2 w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                        id="subject"
                         placeholder="제목"
                         required
                         th:field="*{subject}"
@@ -27,8 +26,6 @@
                 <label class="block text-sm font-medium text-gray-700" for="content">내용</label>
                 <textarea
                         class="mt-2 w-full resize-y rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
-                        id="content"
-                        name="content"
                         placeholder="내용"
                         required
                         rows="8"

@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}">
+<html layout:decorate="~{/common/layout/layout}">
 <div layout:fragment="content" class="mx-auto max-w-lg px-4 my-10">
     <div class="max-w-lg mx-auto px-4">
         <div class="bg-white/80 backdrop-blur border rounded-2xl shadow-sm p-8">
@@ -7,18 +7,13 @@
                 <p class="text-sm text-gray-500 mt-1">Team π에 합류해 보세요</p>
             </header>
 
-            <!-- 서버에서 에러 메시지 내려줄 때 표시용 -->
-            <div th:if="${errorMessage}" class="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                <span th:text="${errorMessage}">에러가 발생했습니다.</span>
-            </div>
-
-            <form th:action="@{/signup}" method="post" class="space-y-5">
+            <form th:action="@{/signup}" th:object="${form}" method="post" class="space-y-5">
+                <div th:replace="~{/common/fragment/errors::errorsFragment}"></div>
                 <!-- 이름 -->
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">이름</label>
                     <input
-                            id="username"
-                            name="username"
+                            th:field="*{username}"
                             type="text"
                             placeholder="이름을 입력하세요."
                             required
@@ -32,8 +27,30 @@
                     <label for="password" class="block text-sm font-medium text-gray-700">비밀번호</label>
                     <div class="relative mt-2">
                         <input
-                                id="password"
-                                name="password"
+                                th:field="*{password}"
+                                type="password"
+                                placeholder="비밀번호를 입력하세요."
+                                required
+                                autocomplete="new-password"
+                                class="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 pr-20 text-gray-900 shadow-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500"
+                        />
+                        <button
+                                type="button"
+                                class="absolute inset-y-0 right-2 my-auto rounded-lg px-3 py-1 text-xs text-gray-600 hover:bg-gray-100"
+                                onclick="const i=document.getElementById('password'); const t=i.type==='password'?'text':'password'; i.type=t; this.textContent=t==='password'?'보기':'숨기기';"
+                        >
+                            보기
+                        </button>
+                    </div>
+                    <p class="mt-2 text-xs text-gray-500">영문, 숫자, 기호를 조합하면 더 안전해요.</p>
+                </div>
+
+                <!-- 비밀번호 확인 -->
+                <div>
+                    <label for="password_confirm" class="block text-sm font-medium text-gray-700">비밀번호</label>
+                    <div class="relative mt-2">
+                        <input
+                                th:field="*{password_confirm}"
                                 type="password"
                                 placeholder="비밀번호를 입력하세요."
                                 required
@@ -55,8 +72,7 @@
                 <div>
                     <label for="nickname" class="block text-sm font-medium text-gray-700">닉네임</label>
                     <input
-                            id="nickname"
-                            name="nickname"
+                            th:field="*{nickname}"
                             type="text"
                             placeholder="닉네임을 입력하세요."
                             required

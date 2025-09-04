@@ -39,7 +39,7 @@ public class AnswerRepositoryTest {
     @Test
     @DisplayName("단일 답변 조회")
     void t2() {
-        Optional<Answer> opAnswer = answerRepository.findById(1);
+        Optional<Answer> opAnswer = answerRepository.findById(1L);
         Answer answer = opAnswer.get();
         assertThat(answer.getContent()).isEqualTo("답변 1");
     }
@@ -52,7 +52,7 @@ public class AnswerRepositoryTest {
 
         Member member = memberService.findById(1);
         Question question = questionService.findById(1);
-        Answer answer = new Answer(member, question, "답변 3");
+        Answer answer = new Answer("답변 3", question, member);
         answerRepository.save(answer);
         assertThat(answer.getId()).isGreaterThan(0);
         assertThat(answer.getContent()).isEqualTo("답변 3");
@@ -69,7 +69,7 @@ public class AnswerRepositoryTest {
         List<Answer> questions = answerRepository.findAll();
         assertThat(questions).hasSize(2);
 
-        Optional<Answer> opAnswer = answerRepository.findById(1);
+        Optional<Answer> opAnswer = answerRepository.findById(1L);
         Answer answer = opAnswer.get();
         answerRepository.delete(answer);
 
