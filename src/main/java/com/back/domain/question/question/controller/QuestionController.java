@@ -29,26 +29,15 @@ public class QuestionController {
     @GetMapping("/list")
     public String showList(
             @ModelAttribute("search") QuestionSearchDto search,
-            @RequestParam(defaultValue = "0") int page,
             Model model
     ) {
-        int pageSize = 7;
         List<Question> questions;
         if (search.getKw().equals("all") && search.getKwType().isEmpty()) {
             questions = questionService.findAll();
         } else {
             questions = questionService.search(search.getKwType(), search.getKw());
         }
-        int firstIndex = page * pageSize;
-        int lastIndex = Math.min(firstIndex + pageSize, questions.size());
-        List<Question> pagedQuestions = firstIndex >= questions.size() ? List.of() : questions.subList(firstIndex, lastIndex);
-
-        int totalPages = (questions.size() + pageSize - 1) / pageSize;
-
-        model.addAttribute("questions", pagedQuestions);
-        model.addAttribute("page", page);
-        model.addAttribute("totalPages", totalPages);
-        System.out.println("전체 페이지:" + totalPages);
+        model.addAttribute("questions", questions);
         return "question/question/list";
     }
 
