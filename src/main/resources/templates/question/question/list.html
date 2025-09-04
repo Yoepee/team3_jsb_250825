@@ -1,4 +1,4 @@
-<html layout:decorate="~{/common/layout/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/common/layout/layout}">
 <div layout:fragment="content" class="mx-auto max-w-5xl px-4 my-10">
     <main class="space-y-6">
         <!-- 헤더 -->
@@ -70,6 +70,16 @@
                 </tbody>
             </table>
         </div>
+        <div class="flex justify-center mt-6 space-x-2">
+            <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+               th:href="@{/questions/list(page=${i}, kw=${search.kw}, kwType=${search.kwType})}"
+               th:text="${i + 1}"
+               th:classappend="${i == page} ? 'bg-indigo-600 text-white' : 'bg-white text-gray-900'"
+               class="px-4 py-2 rounded-xl border shadow-sm transition hover:bg-indigo-100">
+            </a>
+            <p>전체 페이지 수: <span th:text="${totalPages}"></span></p>
+        </div>
+        <div>test</div>
     </main>
 </div>
 </html>
